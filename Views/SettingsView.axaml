@@ -1,0 +1,92 @@
+<UserControl x:Class="GoProPilot.Views.SettingsView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctrls="using:GoProPilot.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:GoProPilot.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer Padding="18">
+        <StackPanel Margin="10,0"
+                    VerticalAlignment="Stretch"
+                    Orientation="Vertical"
+                    Spacing="8">
+            <DockPanel>
+                <Image Height="78"
+                       DockPanel.Dock="Left"
+                       Source="/Assets/GoProPilot.ico" />
+
+                <StackPanel Margin="12,0" Spacing="0">
+                    <TextBlock Classes="TitleTextBlockStyle" Text="GoPro Pilot" />
+
+                    <TextBlock Classes="BodyTextBlockStyle" Text="{Binding CurrentVersion}" />
+
+                    <TextBlock Classes="CaptionTextBlockStyle" Text="Apache License 2.0" />
+
+                    <ui:HyperlinkButton Padding="0"
+                                        Content="https://github.com/CloudSpiritLtd/GoProPilot"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        NavigateUri="{Binding Path=Content, RelativeSource={RelativeSource Self}}" />
+                </StackPanel>
+            </DockPanel>
+
+            <!--
+            <ctrls:OptionsDisplayItem Description="Change the current App Theme."
+                                      Header="Theme"
+                                      Icon="DarkTheme">
+
+                <ctrls:OptionsDisplayItem.ActionButton>
+                    <ComboBox MinWidth="150"
+                              Items="{Binding AppThemes}"
+                              SelectedItem="{Binding CurrentAppTheme}" />
+                </ctrls:OptionsDisplayItem.ActionButton>
+
+            </ctrls:OptionsDisplayItem>
+
+            <ctrls:OptionsDisplayItem Description="Change the current App FlowDirection."
+                                      Header="FlowDirection"
+                                      Icon="AlignRight">
+
+                <ctrls:OptionsDisplayItem.ActionButton>
+                    <ComboBox MinWidth="150"
+                              Items="{Binding AppFlowDirections}"
+                              SelectedItem="{Binding CurrentFlowDirection}" />
+                </ctrls:OptionsDisplayItem.ActionButton>
+
+            </ctrls:OptionsDisplayItem>
+            -->
+
+            <Border Padding="{StaticResource ButtonPadding}"
+                    Background="{DynamicResource ControlFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource OverlayCornerRadius}">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center"
+                                   Classes="BaseTextBlockStyle"
+                                   Text="Found a bug? Want a new feature?" />
+                        <ui:HyperlinkButton Content="Github Issues" NavigateUri="https://github.com/CloudSpiritLtd/GoProPilot/issues" />
+                    </StackPanel>
+
+                    <TextBlock Classes="BaseTextBlockStyle" Text="Dependencies" />
+
+                    <TextBlock TextWrapping="Wrap">
+                        <x:String xml:space="preserve">
+Avalonia (https://github.com/AvaloniaUI/Avalonia) is licensed under the MIT license.
+FluentAvalonia (https://github.com/amwx/FluentAvalonia) is licensed under the MIT license.
+                        </x:String>
+                    </TextBlock>
+
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

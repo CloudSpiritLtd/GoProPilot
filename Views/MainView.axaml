@@ -1,0 +1,176 @@
+<UserControl x:Class="GoProPilot.Views.MainView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:views="using:GoProPilot.Views"
+             xmlns:wnd="using:FluentAvalonia.UI.Windowing"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="ui|NavigationView.AppNav">
+            <Setter Property="IsPaneToggleButtonVisible" Value="False" />
+            <Setter Property="OpenPaneLength" Value="72" />
+        </Style>
+        <Style Selector="ui|NavigationView.AppNav[IsBackButtonVisible=False] SplitView /template/ ContentPresenter#PART_PanePresenter">
+            <Setter Property="Margin" Value="0 40 0 0" />
+        </Style>
+
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter">
+            <Setter Property="Width" Value="72" />
+            <Setter Property="MinHeight" Value="60" />
+            <Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="LayoutRoot"
+                            Margin="4,2"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            TemplatedControl.IsTemplateFocusTarget="True">
+                        <Panel>
+                            <Panel HorizontalAlignment="Left" VerticalAlignment="Center">
+
+                                <Border Name="SelectionIndicator"
+                                        Width="3"
+                                        Height="20"
+                                        VerticalAlignment="Center"
+                                        Background="{DynamicResource NavigationViewSelectionIndicatorForeground}"
+                                        CornerRadius="{StaticResource ControlCornerRadius}"
+                                        Opacity="0" />
+                            </Panel>
+
+                            <DockPanel>
+                                <ContentPresenter Name="ContentPresenter"
+                                                  Grid.Row="1"
+                                                  Margin="0,-15,0,3"
+                                                  Padding="0,4"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Bottom"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  DockPanel.Dock="Bottom"
+                                                  FontSize="10">
+                                    <ContentPresenter.Styles>
+                                        <Style Selector="TextBlock">
+                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </ContentPresenter.Styles>
+                                </ContentPresenter>
+
+                                <Viewbox Name="IconBox"
+                                         Height="28"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center">
+                                    <ContentPresenter Name="Icon" Content="{TemplateBinding Icon}" />
+                                </Viewbox>
+
+                            </DockPanel>
+                        </Panel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter:pointerover /template/ ContentPresenter#ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter:pointerover /template/ ContentPresenter#Icon">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter:pressed /template/ ContentPresenter#ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter:pressed /template/ ContentPresenter#Icon">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter:selected /template/ ContentPresenter#ContentPresenter">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="ui|NavigationViewItem.AppNav uip|NavigationViewItemPresenter:selected /template/ ContentPresenter#Icon">
+            <Setter Property="Foreground" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        <Grid Name="TitleBarHost"
+              Background="Transparent"
+              ColumnDefinitions="Auto,Auto,*">
+            <Image Name="WindowIcon"
+                   Width="18"
+                   Height="18"
+                   Margin="12,4"
+                   DockPanel.Dock="Left"
+                   IsHitTestVisible="False"
+                   Source="/Assets/GoProPilot.ico" />
+
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       IsHitTestVisible="False"
+                       Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+
+            <Border Grid.Column="2" Padding="6">
+                <AutoCompleteBox Name="SearchBox"
+                                 MaxWidth="300"
+                                 wnd:AppWindow.AllowInteractionInTitleBar="True"
+                                 Classes="SampleApp"
+                                 Items="{Binding MainSearchItems}"
+                                 ValueMemberBinding="{Binding Header}"
+                                 Watermark="Search">
+                    <AutoCompleteBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Header}" />
+                        </DataTemplate>
+                    </AutoCompleteBox.ItemTemplate>
+                </AutoCompleteBox>
+            </Border>
+        </Grid>
+
+        <ui:NavigationView Name="NavView"
+                           Grid.RowSpan="2"
+                           AlwaysShowHeader="False"
+                           Classes="AppNav"
+                           IsPaneOpen="True"
+                           IsSettingsVisible="False"
+                           PaneDisplayMode="Left">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Classes="AppNav"
+                                       Content="Home"
+                                       Tag="{x:Type views:HomeView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:IconSourceElement IconSource="{DynamicResource HomeIcon}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Classes="AppNav"
+                                       Content="Media List"
+                                       Tag="{x:Type views:MediaListView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:IconSourceElement IconSource="{DynamicResource MediaListIcon}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Classes="AppNav"
+                                       Content="Settings"
+                                       Tag="{x:Type views:SettingsView}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:IconSourceElement IconSource="{DynamicResource SettingsIcon}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.FooterMenuItems>
+
+            <Panel>
+                <ui:Frame Name="FrameView" />
+            </Panel>
+        </ui:NavigationView>
+
+        <Panel Name="OverlayHost" Grid.Row="1" />
+
+    </Grid>
+</UserControl>

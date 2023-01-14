@@ -1,0 +1,36 @@
+<Application x:Class="GoProPilot.App"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:GoProPilot"
+             xmlns:sty="using:FluentAvalonia.Styling"
+             xmlns:ui="using:FluentAvalonia.UI.Controls">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!--  Override this  -->
+            <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
+
+            <ui:SymbolIconSource x:Key="HomeIcon" Symbol="Home" />
+            <ui:SymbolIconSource x:Key="HomeIconFilled" Symbol="HomeFilled" />
+            <ui:SymbolIconSource x:Key="MediaListIcon" Symbol="Library" />
+            <ui:SymbolIconSource x:Key="MediaListIconFilled" Symbol="LibraryFilled" />
+            <ui:SymbolIconSource x:Key="SettingsIcon" Symbol="Settings" />
+            <ui:SymbolIconSource x:Key="SettingsIconFilled" Symbol="SettingsFilled" />
+
+            <ImageBrush x:Key="TopLevelPageBackgroundImage"
+                        AlignmentY="Top"
+                        Source="/Assets/headerimage.jpeg"
+                        Stretch="Fill" />
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <sty:FluentAvaloniaTheme />
+        <!--<FluentTheme Mode="Light" />-->
+        <StyleInclude Source="avares://FluentAvalonia.UI.Windowing/Styles/FAWindowingStyles.axaml" />
+        <StyleInclude Source="/Styles/OptionsDisplayItemStyles.axaml" />
+    </Application.Styles>
+</Application>
