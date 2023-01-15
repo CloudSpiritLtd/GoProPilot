@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 
 namespace GoProPilot.Views;
@@ -28,6 +30,9 @@ public partial class MainView : UserControl
             //_navView.MenuItems = GetNavigationViewItems();
             //_navView.FooterMenuItems = GetFooterNavigationViewItems();
             _navView.ItemInvoked += OnNavigationViewItemInvoked;
+
+            _navView.SelectedItem = _navView.MenuItems.Cast<NavigationViewItem>().FirstOrDefault();
+            _frameView?.Navigate(typeof(HomeView));
         }
     }
     private void OnNavigationViewItemInvoked(object? sender, NavigationViewItemInvokedEventArgs e)
