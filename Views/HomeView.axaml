@@ -33,7 +33,6 @@
                 </StackPanel>
             </Panel>
 
-
             <StackPanel>
                 <StackPanel Margin="18,0,18,18" Spacing="4">
                     <TextBlock Text="contents" />

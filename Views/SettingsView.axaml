@@ -9,15 +9,16 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <Design.DataContext>
-        <vm:MainViewModel />
-    </Design.DataContext>
+    <UserControl.DataContext>
+        <vm:SettingsViewModel />
+    </UserControl.DataContext>
 
     <ScrollViewer Padding="18">
         <StackPanel Margin="10,0"
                     VerticalAlignment="Stretch"
                     Orientation="Vertical"
                     Spacing="8">
+            <!-- App title -->
             <DockPanel>
                 <Image Height="78"
                        DockPanel.Dock="Left"
@@ -37,31 +38,31 @@
                 </StackPanel>
             </DockPanel>
 
-            <!--
-            <ctrls:OptionsDisplayItem Description="Change the current App Theme."
-                                      Header="Theme"
-                                      Icon="DarkTheme">
+            <Button Content="TEST" Command="{Binding TestCommand}" />
+            <!-- Options -->
+            <ctrls:OptionsDisplayItem Description="Select WLAN Interface used to connect camera."
+                                      Header="WLAN Interface"
+                                      Icon="Wifi4">
 
                 <ctrls:OptionsDisplayItem.ActionButton>
                     <ComboBox MinWidth="150"
-                              Items="{Binding AppThemes}"
-                              SelectedItem="{Binding CurrentAppTheme}" />
+                              Items="{Binding WLANDevices}"
+                              SelectedItem="{Binding CurrentWLAN}" />
                 </ctrls:OptionsDisplayItem.ActionButton>
 
             </ctrls:OptionsDisplayItem>
 
-            <ctrls:OptionsDisplayItem Description="Change the current App FlowDirection."
-                                      Header="FlowDirection"
-                                      Icon="AlignRight">
+            <ctrls:OptionsDisplayItem Description="Select default camera."
+                                      Header="Camera"
+                                      Icon="Camera">
 
                 <ctrls:OptionsDisplayItem.ActionButton>
                     <ComboBox MinWidth="150"
-                              Items="{Binding AppFlowDirections}"
-                              SelectedItem="{Binding CurrentFlowDirection}" />
+                              Items="{Binding BluetoothDevices}"
+                              SelectedItem="{Binding CurrentBluetooth}" />
                 </ctrls:OptionsDisplayItem.ActionButton>
 
             </ctrls:OptionsDisplayItem>
-            -->
 
             <Border Padding="{StaticResource ButtonPadding}"
                     Background="{DynamicResource ControlFillColorDefaultBrush}"
@@ -76,11 +77,11 @@
                         <ui:HyperlinkButton Content="Github Issues" NavigateUri="https://github.com/CloudSpiritLtd/GoProPilot/issues" />
                     </StackPanel>
 
+                    <TextBlock Classes="BaseTextBlockStyle" Text="" />
                     <TextBlock Classes="BaseTextBlockStyle" Text="Dependencies" />
 
                     <TextBlock TextWrapping="Wrap">
-                        <x:String xml:space="preserve">
-Avalonia (https://github.com/AvaloniaUI/Avalonia) is licensed under the MIT license.
+                        <x:String xml:space="preserve">Avalonia (https://github.com/AvaloniaUI/Avalonia) is licensed under the MIT license.
 FluentAvalonia (https://github.com/amwx/FluentAvalonia) is licensed under the MIT license.
                         </x:String>
                     </TextBlock>

@@ -18,7 +18,7 @@
 
             <ImageBrush x:Key="TopLevelPageBackgroundImage"
                         AlignmentY="Top"
-                        Source="/Assets/headerimage.jpeg"
+                        Source="/Assets/headerimage.jpg"
                         Stretch="Fill" />
         </ResourceDictionary>
     </Application.Resources>

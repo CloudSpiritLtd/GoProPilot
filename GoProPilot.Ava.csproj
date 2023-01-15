@@ -17,10 +17,9 @@
 
     <ItemGroup>
         <Folder Include="Assets\PageIcons\" />
-        <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
         <None Remove=".gitignore" />
-        <None Remove="Assets\headerimage.jpeg" />
+        <None Remove="Assets\headerimage.jpg" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,8 +37,36 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview4" />
+        <PackageReference Include="Downloader" Version="3.0.2" />
+        <PackageReference Include="DryIoc.dll" Version="5.3.1" />
         <PackageReference Include="FluentAvalonia.UI.Windowing" Version="2.0.0-preview4" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.0.0-preview4" />
+        <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.27" />
+        <PackageReference Include="ManagedNativeWifi" Version="2.5.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Starlex.Wpf">
+            <HintPath>deps\Starlex.Wpf.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Properties\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+            <CustomToolNamespace>GoProPilot</CustomToolNamespace>
+        </EmbeddedResource>
     </ItemGroup>
 </Project>
