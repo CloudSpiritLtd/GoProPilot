@@ -6,10 +6,15 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
              xmlns:views="using:GoProPilot.Views"
+             xmlns:vm="using:GoProPilot.ViewModels"
              xmlns:wnd="using:FluentAvalonia.UI.Windowing"
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
     <UserControl.Styles>
         <Style Selector="ui|NavigationView.AppNav">
             <Setter Property="IsPaneToggleButtonVisible" Value="False" />
@@ -114,23 +119,33 @@
                        IsHitTestVisible="False"
                        Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
 
+            <!--  Title Bar  -->
             <Border Grid.Column="2" Padding="6">
-                <AutoCompleteBox Name="SearchBox"
-                                 MaxWidth="300"
-                                 wnd:AppWindow.AllowInteractionInTitleBar="True"
-                                 Classes="SampleApp"
-                                 Items="{Binding MainSearchItems}"
-                                 ValueMemberBinding="{Binding Header}"
-                                 Watermark="Search">
-                    <AutoCompleteBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Header}" />
-                        </DataTemplate>
-                    </AutoCompleteBox.ItemTemplate>
-                </AutoCompleteBox>
+                <StackPanel HorizontalAlignment="Center"
+                            wnd:AppWindow.AllowInteractionInTitleBar="True"
+                            Orientation="Horizontal">
+                    <!--
+                    <ComboBox Width="200" Items="{Binding CameraList}" />
+                    -->
+                    <Button Name="ConnectButton"
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding ConnectCommand}"
+                            Content="{Binding ConnectButtonText}" />
+                    <ui:SymbolIcon FontSize="24"
+                                   Foreground="{Binding CameraState, Converter={StaticResource StateToColorConverter}}"
+                                   Symbol="Camera" />
+                    <ui:SymbolIcon FontSize="24"
+                                   Foreground="{Binding WifiAPState, Converter={StaticResource StateToColorConverter}}"
+                                   Symbol="TargetFilled" />
+                    <ui:SymbolIcon FontSize="24"
+                                   Foreground="{Binding WifiState, Converter={StaticResource StateToColorConverter}}"
+                                   Symbol="Wifi4" />
+                </StackPanel>
             </Border>
         </Grid>
 
+        <!--  Page Navigator  -->
         <ui:NavigationView Name="NavView"
                            Grid.RowSpan="2"
                            AlwaysShowHeader="False"

@@ -7,16 +7,17 @@ using ManagedNativeWifi;
 
 namespace GoProPilot.Services.Windows;
 
+// For Windows only
 public class WLANService : IWLANService
 {
-    private readonly SourceCache<WLANDevice, string> _devices = new(_ => _.DeviceID);
+    private readonly SourceCache<WLANDeviceWrapper, string> _devices = new(_ => _.DeviceID);
 
     public WLANService()
     {
         Load();
     }
 
-    public IObservable<IChangeSet<WLANDevice, string>> Connect() => _devices.Connect();
+    public IObservable<IChangeSet<WLANDeviceWrapper, string>> Connect() => _devices.Connect();
 
     private void Load()
     {
@@ -30,11 +31,7 @@ public class WLANService : IWLANService
 
         foreach (var d in intfs)
         {
-            _devices.AddOrUpdate(new WLANDevice(d)
-            {
-                DeviceID = d.Id.ToString(),
-                Name = d.Description,
-            });
+            _devices.AddOrUpdate(new WLANDeviceWrapper(d));
         }
     }
 }

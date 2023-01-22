@@ -1,5 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using DryIoc;
+using GoProPilot.ViewModels;
 
 namespace GoProPilot.Views
 {
@@ -8,6 +10,8 @@ namespace GoProPilot.Views
         public SettingsView()
         {
             InitializeComponent();
+
+            DataContext = Globals.Container.Resolve<SettingsViewModel>();
         }
 
         private void InitializeComponent()

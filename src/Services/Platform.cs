@@ -4,10 +4,10 @@ namespace GoProPilot.Services;
 
 public  static class Platform
 {
-    public static ICamera GetCameraAPI()
+    public static ICameraService GetCameraAPI()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return new GoProPilot.Services.Windows.Camera(null);
+            return new GoProPilot.Services.Windows.CameraService(null);
 
         return null;
     }

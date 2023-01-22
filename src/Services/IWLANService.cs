@@ -6,5 +6,5 @@ namespace GoProPilot.Services;
 
 public interface IWLANService
 {
-    IObservable<IChangeSet<WLANDevice, string>> Connect();
+    IObservable<IChangeSet<WLANDeviceWrapper, string>> Connect();
 }

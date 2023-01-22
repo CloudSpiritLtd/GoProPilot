@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using GoProPilot.Models;
 using ManagedNativeWifi;
 using Newtonsoft.Json;
 
 namespace GoProPilot;
-
-public class Config
-{
-    public string DownloadFolder { get; set; } = @"\\nas\video2\GoPro";
-    public string WLANDeviceID { get; set; } = "";
-}
 
 public class RuntimeConfig
 {

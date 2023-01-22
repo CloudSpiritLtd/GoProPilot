@@ -29,7 +29,7 @@ public class OptionsDisplayItem : TemplatedControl
     public static readonly StyledProperty<bool> ExpandsProperty =
         AvaloniaProperty.Register<OptionsDisplayItem, bool>(nameof(Expands));
 
-    public static readonly StyledProperty<object> ContentProperty =
+    public static readonly StyledProperty<object?> ContentProperty =
         ContentControl.ContentProperty.AddOwner<OptionsDisplayItem>();
 
     public static readonly DirectProperty<OptionsDisplayItem, bool> IsExpandedProperty =
@@ -75,7 +75,7 @@ public class OptionsDisplayItem : TemplatedControl
         set => SetValue(ExpandsProperty, value);
     }
 
-    public object Content
+    public object? Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
@@ -135,12 +135,15 @@ public class OptionsDisplayItem : TemplatedControl
         base.OnApplyTemplate(e);
 
         _layoutRoot = e.NameScope.Find<Border>("LayoutRoot");
-        _layoutRoot.PointerPressed += OnLayoutRootPointerPressed;
-        _layoutRoot.PointerReleased += OnLayoutRootPointerReleased;
-        _layoutRoot.PointerCaptureLost += OnLayoutRootPointerCaptureLost;
+        if (_layoutRoot != null)
+        {
+            _layoutRoot.PointerPressed += OnLayoutRootPointerPressed;
+            _layoutRoot.PointerReleased += OnLayoutRootPointerReleased;
+            _layoutRoot.PointerCaptureLost += OnLayoutRootPointerCaptureLost;
+        }
     }
 
-    private void OnLayoutRootPointerPressed(object sender, PointerPressedEventArgs e)
+    private void OnLayoutRootPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed)
         {
@@ -149,7 +152,7 @@ public class OptionsDisplayItem : TemplatedControl
         }
     }
 
-    private void OnLayoutRootPointerReleased(object sender, PointerReleasedEventArgs e)
+    private void OnLayoutRootPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         var pt = e.GetCurrentPoint(this);
         if (_isPressed && pt.Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased)
@@ -169,7 +172,7 @@ public class OptionsDisplayItem : TemplatedControl
         }
     }
 
-    private void OnLayoutRootPointerCaptureLost(object sender, PointerCaptureLostEventArgs e)
+    private void OnLayoutRootPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
     {
         _isPressed = false;
         PseudoClasses.Set(":pressed", false);
@@ -177,5 +180,5 @@ public class OptionsDisplayItem : TemplatedControl
 
     private bool _isPressed;
     private bool _isExpanded;
-    private Border _layoutRoot;
+    private Border? _layoutRoot;
 }

@@ -21,7 +21,6 @@ public partial class MainWindow : AppWindow
         this.AttachDevTools();
 #endif
         TitleBar.ExtendsContentIntoTitleBar = true;
-
     }
 
     protected override void OnOpened(EventArgs e)

@@ -6,7 +6,8 @@ using InTheHand.Bluetooth;
 
 namespace GoProPilot.Services.Windows;
 
-public class Camera : ICamera
+// For Windows, macOS
+public class CameraService : ICameraService
 {
     private static readonly Guid NotifyCommandGUID = new("b5f90073-aa8d-11e3-9046-0002a5d5c51b");
     private static readonly Guid NotifyQueryRespGUID = new("b5f90077-aa8d-11e3-9046-0002a5d5c51b");
@@ -27,9 +28,22 @@ public class Camera : ICamera
     private GattCharacteristic? _setSettings = null;
     private bool _wifiActive;
 
-    public Camera(BluetoothDevice dev)
+    public CameraService(BluetoothDevice dev)
     {
         _device = dev;
+        _device.GattServerDisconnected += BTDevice_GattServerDisconnected;
+    }
+
+    public async Task ConnectAsync()
+    {
+        await _device.Gatt.ConnectAsync();
+        IsConnected = _device.Gatt.IsConnected;
+    }
+
+    public void Disconnect()
+    {
+        _device.Gatt.Disconnect();
+        IsConnected = false;
     }
 
     public async Task SetupAsync()
@@ -101,6 +115,14 @@ public class Camera : ICamera
         var response = new byte[totalLength - 2];
         buffer.CopyTo(response, headerLength + 2);
         return response;
+    }
+
+    private void BTDevice_GattServerDisconnected(object? sender, EventArgs e)
+    {
+        IsConnected = false;
+
+        //var device = sender as BluetoothDevice;
+        //await device.Gatt.ConnectAsync();
     }
 
     private void NotifyCmds_ValueChanged(object? sender, GattCharacteristicValueChangedEventArgs args)
@@ -287,6 +309,8 @@ public class Camera : ICamera
             }
         }
     }
+
+    public bool IsConnected { get; private set; }
 
     public string? WifiPassword { get; private set; }
 

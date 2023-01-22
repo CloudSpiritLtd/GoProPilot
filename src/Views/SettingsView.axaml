@@ -9,9 +9,9 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <UserControl.DataContext>
+    <Design.DataContext>
         <vm:SettingsViewModel />
-    </UserControl.DataContext>
+    </Design.DataContext>
 
     <ScrollViewer Padding="18">
         <StackPanel Margin="10,0"
@@ -40,6 +40,16 @@
 
             <Button Content="TEST" Command="{Binding TestCommand}" />
             <!-- Options -->
+            <ctrls:OptionsDisplayItem Description="Select default folder for downloaded contents."
+                                      Header="Download Folder"
+                                      Icon="OpenFolder">
+
+                <ctrls:OptionsDisplayItem.ActionButton>
+                    <TextBox MinWidth="250" Text="{Binding DownloadFolder}" />
+                </ctrls:OptionsDisplayItem.ActionButton>
+
+            </ctrls:OptionsDisplayItem>
+
             <ctrls:OptionsDisplayItem Description="Select WLAN Interface used to connect camera."
                                       Header="WLAN Interface"
                                       Icon="Wifi4">
