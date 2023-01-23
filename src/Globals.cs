@@ -18,6 +18,7 @@ public static class Globals
 
         Container.Register<MainViewModel>(Reuse.Singleton);
         Container.Register<SettingsViewModel>(Reuse.Singleton);
+        Container.Register<MediaListViewModel>(Reuse.Singleton);
     }
 
     public static void Init()

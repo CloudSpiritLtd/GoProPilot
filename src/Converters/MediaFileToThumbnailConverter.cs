@@ -1,26 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
+using Avalonia.Data.Converters;
+using Avalonia.Media.Imaging;
 using GoProPilot.Models;
 
 namespace GoProPilot.Converters;
 
 public class MediaFileToThumbnailConverter : IMultiValueConverter
 {
-    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
         if (values[0] is string dir && values[1] is RawMediaFile file)
         {
-            var url = $"http://10.5.5.9:8080/gopro/media/thumbnail?path={dir}/{file.Name}";
-            return new BitmapImage(new Uri(url));
+            return $"http://10.5.5.9:8080/gopro/media/thumbnail?path={dir}/{file.Name}";
         }
         else
-            return new BitmapImage();
-    }
-
-    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
+            return string.Empty;
     }
 }

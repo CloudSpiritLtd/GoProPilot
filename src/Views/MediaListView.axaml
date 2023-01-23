@@ -1,8 +1,195 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="GoProPilot.Views.MediaListView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:conv="using:GoProPilot.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="GoProPilot.Views.MediaListView">
-  Welcome to Avalonia!
+             xmlns:model="using:GoProPilot.Models"
+             xmlns:stl="http://starlex.ixvin.com/avalonia/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:views="using:GoProPilot.Views"
+             xmlns:vm="using:GoProPilot.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:MediaListViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <stl:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+        <conv:MediaFileToThumbnailConverter x:Key="MediaFileToThumbnailConverter" />
+        <conv:MediaFileToDownloadUrlConverter x:Key="MediaFileToDownloadUrlConverter" />
+        <!--<conv:GrayscaleConverter x:Key="GrayscaleConverter" />-->
+
+        <!--  缩略图下面的链接  -->
+        <DataTemplate x:Key="MediaFileDownloadTemplate" DataType="{x:Type model:RawMediaFile}">
+            <Grid Margin="0,2">
+                <ui:HyperlinkButton Click="MediaFileHyperlink_Click"
+                                    Content="{Binding Name}"
+                                    FontFamily="Consolas">
+                    <ui:HyperlinkButton.Tag>
+                        <MultiBinding Converter="{StaticResource MediaFileToDownloadUrlConverter}">
+                            <Binding ElementName="RootPanel" Path="DataContext.Dir" />
+                            <Binding />
+                        </MultiBinding>
+                    </ui:HyperlinkButton.Tag>
+                </ui:HyperlinkButton>
+
+                <TextBlock HorizontalAlignment="Right"
+                           FontFamily="Consolas"
+                           Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" />
+            </Grid>
+        </DataTemplate>
+
+        <!--
+        <Style x:Key="GrayScaleStyle" TargetType="Grid">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <stl:GrayscaleEffect DesaturationFactor="1" />
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Deleted}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation AccelerationRatio="0.10"
+                                                 DecelerationRatio="0.25"
+                                                 Storyboard.TargetProperty="(stl:GrayscaleEffect.DesaturationFactor)"
+                                                 To="0.0"
+                                                 Duration="0:0:0.3" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(stl:GrayscaleEffect.DesaturationFactor)"
+                                                 To="1"
+                                                 Duration="0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        -->
+
+        <!--  文件组的模板，包含时间、缩略图、下载链接  -->
+        <DataTemplate x:Key="ChapteredFileTemplate" DataType="{x:Type model:ChapteredFile}">
+            <Border Margin="0,0,10,10" IsEnabled="{Binding Deleted, Converter={StaticResource InverseBooleanConverter}}">
+                <!--<Grid Effect="{Binding Deleted, Converter={StaticResource GrayscaleConverter}}">-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <asyncImageLoader:AdvancedImage Width="160" Height="120">
+                        <asyncImageLoader:AdvancedImage.Source>
+                            <MultiBinding Converter="{StaticResource MediaFileToThumbnailConverter}">
+                                <Binding ElementName="RootPanel" Path="DataContext.Dir" />
+                                <Binding Path="First" />
+                            </MultiBinding>
+                        </asyncImageLoader:AdvancedImage.Source>
+                    </asyncImageLoader:AdvancedImage>
+
+                    <!-- TODO: Play media file
+                    <Button Grid.Row="0"
+                            Margin="0,0,16,-20"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                        <md:PackIcon Kind="Play" />
+                    </Button>
+                    -->
+
+                    <StackPanel Grid.Row="1" Margin="8,8,8,0">
+                        <!--<TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />-->
+                        <TextBlock FontSize="20" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />
+                        <ItemsControl Margin="0,5,0,0"
+                                      ItemTemplate="{StaticResource MediaFileDownloadTemplate}"
+                                      Items="{Binding Files}" />
+                    </StackPanel>
+
+                    <DockPanel Grid.Row="2"
+                               Margin="8"
+                               HorizontalAlignment="Stretch"
+                               LastChildFill="False">
+                        <TextBlock VerticalAlignment="Center"
+                                   DockPanel.Dock="Left"
+                                   FontWeight="Bold"
+                                   Foreground="Red"
+                                   IsVisible="{Binding Deleted}"
+                                   Text="Deleted !" />
+                        <Button Width="30"
+                                Padding="2,0,2,0"
+                                Command="{Binding DeleteCommand}"
+                                DockPanel.Dock="Right"
+                                Foreground="Red"
+                                IsVisible="{Binding !Deleted}">
+                            <ui:SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </DockPanel>
+
+
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FileGroupTemplate" DataType="{x:Type model:FileListByDate}">
+            <StackPanel Margin="10" Orientation="Vertical">
+                <!--<TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{Binding Date, StringFormat=yyyy-M-d}" />-->
+                <TextBlock FontSize="24" Text="{Binding Date, StringFormat=yyyy-M-d}" />
+                <ItemsControl Margin="0,5,0,10"
+                              ItemTemplate="{StaticResource ChapteredFileTemplate}"
+                              Items="{Binding Files}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MediaDirectoryTemplate" DataType="{x:Type model:MediaDirectory}">
+            <StackPanel x:Name="RootPanel" Orientation="Vertical">
+                <!--<TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}" Text="{Binding Dir}" />-->
+                <TextBlock FontSize="48" Text="{Binding Dir}" />
+                <ItemsControl ItemTemplate="{StaticResource FileGroupTemplate}" Items="{Binding FileLists}">
+                    <!-- 使用下面的模板，可以让多个日期显示在一行上。
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    -->
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl Padding="10"
+                          ItemTemplate="{StaticResource MediaDirectoryTemplate}"
+                          Items="{Binding Medias}" />
+        </ScrollViewer>
+
+        <Button Margin="0,0,32,24"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding GetMediasCommand}">
+            <ui:SymbolIcon Width="24"
+                           Height="24"
+                           Symbol="Refresh" />
+        </Button>
+    </Grid>
+
 </UserControl>

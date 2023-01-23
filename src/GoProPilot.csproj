@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Assets\GoProPilot.ico" />
+        <Content Include="Assets\GoProPilot.ico" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,6 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.0.0-avalonia11-preview2" />
         <PackageReference Include="Avalonia" Version="11.0.0-preview4" />
         <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
         <!--<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />-->
@@ -46,6 +47,12 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
         <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Starlex.Avalonia">
+            <HintPath>..\deps\Starlex.Avalonia.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>

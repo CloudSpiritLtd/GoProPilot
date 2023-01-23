@@ -4,6 +4,7 @@ using Avalonia.ReactiveUI;
 using DryIoc;
 using FluentAvalonia.UI.Windowing;
 using GoProPilot.ViewModels;
+using Starlex.Avalonia.Converters;
 
 namespace GoProPilot;
 
@@ -24,7 +25,9 @@ internal class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        GC.KeepAlive(typeof(FileSizeToStringConverter).Assembly);
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
             .UseReactiveUI()
@@ -34,4 +37,5 @@ internal class Program
                 CompositionBackdropCornerRadius = 8f
             })
             .UseFAWindowing();
+    }
 }
