@@ -24,9 +24,4 @@
         <OutputPath>..\bin\Release</OutputPath>
     </PropertyGroup>
 
-    <ItemGroup>
-        <Reference Include="Starlex.Wpf">
-            <HintPath>..\deps\Starlex.Wpf.dll</HintPath>
-        </Reference>
-    </ItemGroup>
 </Project>

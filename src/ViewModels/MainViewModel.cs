@@ -67,13 +67,7 @@ public class MainViewModel : ViewModelBase
     {
         if (CameraState != State.Active)
         {
-            var dialog = new ContentDialog()
-            {
-                Title = "Error",
-                Content = "Camera not connected",
-                PrimaryButtonText = "Ok",
-            };
-            await dialog.ShowAsync();
+            await Utils.ShowErrorMessageAsync("Camera not connected");
             return;
         }
 
@@ -141,14 +135,9 @@ public class MainViewModel : ViewModelBase
     {
         if (_settingsVM.CurrentBluetooth == null || _settingsVM.CurrentWLAN == null)
         {
-            var dialog = new ContentDialog()
-            {
-                Title = "Error",
-                Content = "You need to select proper devices in Settings page first.",
-                PrimaryButtonText = "Ok",
-            };
-            await dialog.ShowAsync();
-            return; //todo: use INavigationService
+            //todo: use INavigationService, auto nav to settings page.
+            await Utils.ShowErrorMessageAsync("You need to select proper devices in Settings page first.");
+            return;
         }
 
         if (IsConnected)
