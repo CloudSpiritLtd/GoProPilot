@@ -13,6 +13,6 @@ public class MediaFileToDownloadUrlConverter : IMultiValueConverter
         if (values[0] is string dir && values[1] is RawMediaFile file)
             return $"http://10.5.5.9:8080/videos/DCIM/{dir}/{file.Name}";
         else
-            return string.Empty;
+            return null;
     }
 }

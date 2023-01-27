@@ -11,12 +11,12 @@
              xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
              xmlns:views="using:GoProPilot.Views"
              xmlns:vm="using:GoProPilot.ViewModels"
-             d:DesignHeight="450"
+             d:DesignHeight="600"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <Design.DataContext>
+    <!--<Design.DataContext>
         <vm:MediaListViewModel />
-    </Design.DataContext>
+    </Design.DataContext>-->
 
     <UserControl.Resources>
         <stl:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
@@ -25,21 +25,25 @@
         <!--<conv:GrayscaleConverter x:Key="GrayscaleConverter" />-->
 
         <!--  缩略图下面的链接  -->
-        <DataTemplate x:Key="MediaFileDownloadTemplate" DataType="{x:Type model:RawMediaFile}">
+        <DataTemplate x:Key="MediaFileDownloadTemplate" DataType="model:RawMediaFile">
             <Grid Margin="0,2">
-                <ui:HyperlinkButton Click="MediaFileHyperlink_Click"
+                <ui:HyperlinkButton Margin="0"
+                                    Padding="0"
+                                    Click="MediaFileHyperlink_Click"
                                     Content="{Binding Name}"
-                                    FontFamily="Consolas">
+                                    FontFamily="Consolas"
+                                    FontSize="12">
                     <ui:HyperlinkButton.Tag>
                         <MultiBinding Converter="{StaticResource MediaFileToDownloadUrlConverter}">
-                            <Binding ElementName="RootPanel" Path="DataContext.Dir" />
-                            <Binding />
+                            <Binding Path="$parent[StackPanel;2].DataContext.Dir" />
+                            <Binding Path="." />
                         </MultiBinding>
                     </ui:HyperlinkButton.Tag>
                 </ui:HyperlinkButton>
-
                 <TextBlock HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
                            FontFamily="Consolas"
+                           FontSize="12"
                            Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" />
             </Grid>
         </DataTemplate>
@@ -80,8 +84,13 @@
         -->
 
         <!--  文件组的模板，包含时间、缩略图、下载链接  -->
-        <DataTemplate x:Key="ChapteredFileTemplate" DataType="{x:Type model:ChapteredFile}">
-            <Border Margin="0,0,10,10" IsEnabled="{Binding Deleted, Converter={StaticResource InverseBooleanConverter}}">
+        <DataTemplate x:Key="ChapteredFileTemplate" DataType="model:ChapteredFile">
+            <Border Margin="0,0,10,10"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    ClipToBounds="True"
+                    CornerRadius="2"
+                    IsEnabled="{Binding !Deleted}">
                 <!--<Grid Effect="{Binding Deleted, Converter={StaticResource GrayscaleConverter}}">-->
                 <Grid>
                     <Grid.RowDefinitions>
@@ -90,14 +99,16 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <asyncImageLoader:AdvancedImage Width="160" Height="120">
-                        <asyncImageLoader:AdvancedImage.Source>
-                            <MultiBinding Converter="{StaticResource MediaFileToThumbnailConverter}">
-                                <Binding ElementName="RootPanel" Path="DataContext.Dir" />
-                                <Binding Path="First" />
-                            </MultiBinding>
-                        </asyncImageLoader:AdvancedImage.Source>
-                    </asyncImageLoader:AdvancedImage>
+                    <Border>
+                        <asyncImageLoader:AdvancedImage Width="160" Height="120">
+                            <asyncImageLoader:AdvancedImage.Source>
+                                <MultiBinding Converter="{StaticResource MediaFileToThumbnailConverter}">
+                                    <Binding Path="$parent[StackPanel;1].DataContext.Dir" />
+                                    <Binding Path="First" />
+                                </MultiBinding>
+                            </asyncImageLoader:AdvancedImage.Source>
+                        </asyncImageLoader:AdvancedImage>
+                    </Border>
 
                     <!-- TODO: Play media file
                     <Button Grid.Row="0"
@@ -111,7 +122,7 @@
 
                     <StackPanel Grid.Row="1" Margin="8,8,8,0">
                         <!--<TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />-->
-                        <TextBlock FontSize="20" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />
+                        <TextBlock FontSize="20" Text="{Binding First.Modified, StringFormat={}{0:HH:mm:ss}}" />
                         <ItemsControl Margin="0,5,0,0"
                                       ItemTemplate="{StaticResource MediaFileDownloadTemplate}"
                                       Items="{Binding Files}" />
@@ -136,8 +147,6 @@
                             <ui:SymbolIcon Symbol="Delete" />
                         </Button>
                     </DockPanel>
-
-
                 </Grid>
             </Border>
         </DataTemplate>
@@ -145,7 +154,7 @@
         <DataTemplate x:Key="FileGroupTemplate" DataType="{x:Type model:FileListByDate}">
             <StackPanel Margin="10" Orientation="Vertical">
                 <!--<TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="{Binding Date, StringFormat=yyyy-M-d}" />-->
-                <TextBlock FontSize="24" Text="{Binding Date, StringFormat=yyyy-M-d}" />
+                <TextBlock FontSize="24" Text="{Binding Date, StringFormat={}{0:yyyy-M-d}}" />
                 <ItemsControl Margin="0,5,0,10"
                               ItemTemplate="{StaticResource ChapteredFileTemplate}"
                               Items="{Binding Files}">
@@ -159,7 +168,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="MediaDirectoryTemplate" DataType="{x:Type model:MediaDirectory}">
-            <StackPanel x:Name="RootPanel" Orientation="Vertical">
+            <StackPanel Name="RootPanel" Orientation="Vertical">
                 <!--<TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}" Text="{Binding Dir}" />-->
                 <TextBlock FontSize="48" Text="{Binding Dir}" />
                 <ItemsControl ItemTemplate="{StaticResource FileGroupTemplate}" Items="{Binding FileLists}">

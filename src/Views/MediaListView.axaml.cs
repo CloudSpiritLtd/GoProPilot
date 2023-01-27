@@ -1,7 +1,9 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DryIoc;
+using FluentAvalonia.UI.Controls;
 using GoProPilot.Models;
 using GoProPilot.ViewModels;
 
@@ -22,11 +24,10 @@ public partial class MediaListView : UserControl
 
     private void MediaFileHyperlink_Click(object sender, RoutedEventArgs e)
     {
-        // e.Source.Tag is url string
-        //if (e.Source is Hyperlink hyperlink)
+        if (e.Source is HyperlinkButton btn)
         {
             //DownloadVM.AddTask(((RawMediaFile)hyperlink.DataContext).Name, hyperlink.NavigateUri);
+            Console.WriteLine(btn.Tag);
         }
     }
-
 }
