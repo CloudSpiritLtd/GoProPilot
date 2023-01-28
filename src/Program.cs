@@ -17,6 +17,9 @@ internal class Program
     public static void Main(string[] args)
     {
         Globals.Init();
+        var cfgSvc = Globals.Container.Resolve<ConfigService>();
+        cfgSvc.Load();
+
         Globals.Container.Resolve<SettingsViewModel>();
 
         BuildAvaloniaApp()

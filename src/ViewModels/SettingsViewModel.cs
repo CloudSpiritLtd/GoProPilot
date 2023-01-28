@@ -2,14 +2,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using DryIoc;
 using DynamicData;
 using GoProPilot.Models;
 using GoProPilot.Services.Windows;
-using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -18,14 +17,13 @@ namespace GoProPilot.ViewModels;
 public class SettingsViewModel : ViewModelBase
 {
     private readonly ReadOnlyObservableCollection<BluetoothDeviceWrapper> _bluetoothDevices;
+    private readonly ConfigService _configService;
     private readonly ReadOnlyObservableCollection<WLANDeviceWrapper> _wlanDevices;
-    private Config _config = new();
-    private bool _isLoading;
 
     public SettingsViewModel()
     {
-        LoadSettings();
-        DownloadFolder = _config.DownloadFolder;
+        _configService = Globals.Container.Resolve<ConfigService>();
+        DownloadFolder = _configService.Config.DownloadFolder;
 
         var bthService = new BluetoothService();
         bthService.Connect()
@@ -52,49 +50,24 @@ public class SettingsViewModel : ViewModelBase
         PropertyChanged += DoPropertyChanged;
     }
 
-    public void LoadSettings()
-    {
-        _isLoading = true;
-        try
-        {
-            if (File.Exists("Config.json"))
-            {
-                using var sr = new StreamReader("Config.json");
-                var str = sr.ReadToEnd();
-                var config = JsonConvert.DeserializeObject<Config>(str);
-                if (config != null)
-                {
-                    _config = config;
-                }
-            }
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-    }
-
     public void SaveSettings()
     {
         if (CurrentWLAN != null)
-            _config.WLANDeviceID = CurrentWLAN.DeviceID;
+            _configService.Config.WLANDeviceID = CurrentWLAN.DeviceID;
         if (CurrentBluetooth != null)
-            _config.CameraDeviceID = CurrentBluetooth.DeviceID;
+            _configService.Config.CameraDeviceID = CurrentBluetooth.DeviceID;
+        _configService.Config.DownloadFolder = DownloadFolder;
 
-        using var sw = new StreamWriter("Config.json");
-        sw.Write(JsonConvert.SerializeObject(_config, Formatting.Indented));
-        sw.Close();
+        _configService.Save();
     }
 
     private void BluetoothDevices_Changed(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        CurrentBluetooth = _bluetoothDevices.Where(_ => _.DeviceID == _config.CameraDeviceID).FirstOrDefault();
+        CurrentBluetooth = _bluetoothDevices.Where(_ => _.DeviceID == _configService.Config.CameraDeviceID).FirstOrDefault();
     }
 
     private void DoPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (_isLoading) return;
-
         SaveSettings();
     }
 
@@ -108,7 +81,7 @@ public class SettingsViewModel : ViewModelBase
 
     private void WLANDevices_Changed(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        CurrentWLAN = _wlanDevices.Where(_ => _.DeviceID == _config.WLANDeviceID).FirstOrDefault();
+        CurrentWLAN = _wlanDevices.Where(_ => _.DeviceID == _configService.Config.WLANDeviceID).FirstOrDefault();
     }
 
     public ReadOnlyObservableCollection<BluetoothDeviceWrapper> BluetoothDevices => _bluetoothDevices;
