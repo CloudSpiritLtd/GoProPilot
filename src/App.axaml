@@ -14,6 +14,8 @@
             <ui:SymbolIconSource x:Key="HomeIconFilled" Symbol="HomeFilled" />
             <ui:SymbolIconSource x:Key="MediaListIcon" Symbol="Library" />
             <ui:SymbolIconSource x:Key="MediaListIconFilled" Symbol="LibraryFilled" />
+            <ui:SymbolIconSource x:Key="DownloadIcon" Symbol="List" />
+            <ui:SymbolIconSource x:Key="DownloadIconFilled" Symbol="List" />
             <ui:SymbolIconSource x:Key="SettingsIcon" Symbol="Settings" />
             <ui:SymbolIconSource x:Key="SettingsIconFilled" Symbol="SettingsFilled" />
 

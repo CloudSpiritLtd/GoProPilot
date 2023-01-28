@@ -1,0 +1,65 @@
+<UserControl x:Class="GoProPilot.Views.DownloadView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="using:GoProPilot.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:model="using:GoProPilot.Models"
+             xmlns:stl="http://starlex.ixvin.com/avalonia/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:views="using:GoProPilot.Views"
+             xmlns:vm="using:GoProPilot.ViewModels"
+             d:DesignHeight="600"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:DownloadViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <conv:DownloadStateToIconConverter x:Key="DownloadStateToIconConverter" />
+
+        <DataTemplate x:Key="DownloadItemTemplate" DataType="vm:DownloadItem">
+            <StackPanel Margin="10">
+                <Grid>
+                    <TextBlock Margin="0,0,0,5"
+                               VerticalAlignment="Center"
+                               Text="{Binding FileName}" />
+                    <ui:SymbolIcon HorizontalAlignment="Right" Symbol="{Binding Status, Converter={StaticResource DownloadStateToIconConverter}}" />
+                </Grid>
+                <ProgressBar Height="10"
+                             Maximum="100"
+                             Minimum="0"
+                             Value="{Binding Progress}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <Border BorderBrush="Silver"
+                BorderThickness="0,0,0,1"
+                DockPanel.Dock="Top">
+            <Grid Margin="10,2">
+                <TextBlock HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Text="Downloads" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Width="48"
+                            Height="32"
+                            DockPanel.Dock="Right">
+                        <Button.Content>
+                            <ui:SymbolIcon Symbol="Play" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ItemsControl FontSize="16"
+                      ItemTemplate="{StaticResource DownloadItemTemplate}"
+                      Items="{Binding DownloadManager.Items}" />
+
+    </DockPanel>
+
+</UserControl>

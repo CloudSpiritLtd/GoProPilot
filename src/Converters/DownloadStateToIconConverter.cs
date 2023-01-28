@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using System.Windows.Data;
+using Avalonia.Data.Converters;
 using Downloader;
 using FluentAvalonia.UI.Controls;
 
@@ -8,7 +8,7 @@ namespace GoProPilot.Converters;
 
 public class DownloadStateToIconConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is DownloadStatus status)
             return status switch
@@ -22,7 +22,7 @@ public class DownloadStateToIconConverter : IValueConverter
         return Symbol.Download;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }
