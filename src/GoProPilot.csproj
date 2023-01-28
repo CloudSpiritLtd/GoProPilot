@@ -15,6 +15,23 @@
         <ApplicationIcon>Assets\GoProPilot.ico</ApplicationIcon>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <WeaverConfiguration>
+            <Weavers>
+                <ReactiveUI />
+            </Weavers>
+        </WeaverConfiguration>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <WeaverConfiguration>
+            <Weavers>
+                <ReactiveUI />
+                <Costura IncludeDebugSymbols="false" />
+            </Weavers>
+        </WeaverConfiguration>
+    </PropertyGroup>
+
     <ItemGroup>
         <Folder Include="Assets\PageIcons\" />
         <AvaloniaResource Include="Assets\**" />
@@ -39,13 +56,23 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview4" />
+        <PackageReference Include="Costura.Fody" Version="5.7.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Downloader" Version="3.0.2" />
         <PackageReference Include="DryIoc.dll" Version="5.3.1" />
+        <PackageReference Include="DynamicData" Version="7.12.8" />
         <PackageReference Include="FluentAvalonia.UI.Windowing" Version="2.0.0-preview4" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.0.0-preview4" />
+        <PackageReference Include="Fody" Version="6.6.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.29" />
         <PackageReference Include="ManagedNativeWifi" Version="2.5.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="ReactiveUI" Version="18.4.1" />
         <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     </ItemGroup>
