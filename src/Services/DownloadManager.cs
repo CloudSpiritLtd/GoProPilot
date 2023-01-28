@@ -2,16 +2,19 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Downloader;
 using DryIoc;
+using DynamicData;
 using GoProPilot.ViewModels;
 
 namespace GoProPilot.Services;
 
 public class DownloadManager
 {
+    private readonly SourceCache<DownloadItem, string> _items = new(_ => _.FileName);
     private readonly ConfigService _configService;
     private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
     private readonly DownloadService _downloader = new();
@@ -24,9 +27,11 @@ public class DownloadManager
 
     public void Add(DownloadItem item)
     {
-        Items.Add(item);
+        _items.AddOrUpdate(item);
         StartDownload();
     }
+
+    public IObservable<IChangeSet<DownloadItem, string>> Connect() => _items.Connect();
 
     public void ExecuteCancel()
     {
@@ -48,7 +53,7 @@ public class DownloadManager
         UnBindEvents(item);
         _dispatcher.InvokeAsync(() =>
         {
-            Items.Remove(item);
+            _items.Remove(item);
         });
     }
 
@@ -74,16 +79,16 @@ public class DownloadManager
         _downloader.DownloadFileCompleted += item.OnDownloadFileCompleted;
     }
 
-    private void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
+    private async void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
     {
         // todo: test e.Cancelled, e.Error
         // move to next
         if (Current != null)
         {
             UnBindEvents(Current);
-            _dispatcher.InvokeAsync(() =>
+            await _dispatcher.InvokeAsync(() =>
             {
-                Items.Remove(Current);
+                _items.Remove(Current);
             });
         }
 
@@ -92,12 +97,14 @@ public class DownloadManager
 
     private void StartDownload()
     {
-        if (Items.Count > 0)
+        if (_items.Count > 0)
         {
-            Current = Items[0];
+            Current = _items.Items.First();
             BindEvents(Current);
 
+#if DEBUG
             if (!Design.IsDesignMode)
+#endif
             {
                 _downloader.DownloadFileTaskAsync(Current.Url, new DirectoryInfo(_configService.Config.DownloadFolder));
             }
@@ -127,6 +134,4 @@ public class DownloadManager
     }
 
     public DownloadItem? Current { get; private set; }
-
-    public ObservableCollection<DownloadItem> Items { get; } = new();
 }

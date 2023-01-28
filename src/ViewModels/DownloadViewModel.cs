@@ -1,18 +1,30 @@
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Downloader;
 using DryIoc;
+using DynamicData;
 using GoProPilot.Services;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace GoProPilot.ViewModels;
 
 public class DownloadViewModel : ViewModelBase
 {
+    private readonly ReadOnlyObservableCollection<DownloadItem> _items;
+
     public DownloadViewModel()
     {
         DownloadManager = Globals.Container.Resolve<DownloadManager>();
+        DownloadManager.Connect()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Bind(out _items)
+            .Subscribe();
+
+#if DEBUG
         if (Design.IsDesignMode)
         {
             DownloadManager.Add(new()
@@ -26,6 +38,7 @@ public class DownloadViewModel : ViewModelBase
                 Url = "http://test.com/gopro2.mp4",
             });
         }
+#endif
     }
 
     public void AddTask(string name, string url)
@@ -40,6 +53,8 @@ public class DownloadViewModel : ViewModelBase
     }
 
     public DownloadManager DownloadManager { get; }
+
+    public ReadOnlyObservableCollection<DownloadItem> Items { get => _items; }
 }
 
 public class DownloadItem : ViewModelBase

@@ -58,7 +58,7 @@
 
         <ItemsControl FontSize="16"
                       ItemTemplate="{StaticResource DownloadItemTemplate}"
-                      Items="{Binding DownloadManager.Items}" />
+                      Items="{Binding Items}" />
 
     </DockPanel>
 
