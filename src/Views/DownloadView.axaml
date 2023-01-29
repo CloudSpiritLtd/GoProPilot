@@ -8,7 +8,7 @@
              xmlns:stl="http://starlex.ixvin.com/avalonia/xaml"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
-             xmlns:views="using:GoProPilot.Views"
+             xmlns:view="using:GoProPilot.Views"
              xmlns:vm="using:GoProPilot.ViewModels"
              d:DesignHeight="600"
              d:DesignWidth="800"

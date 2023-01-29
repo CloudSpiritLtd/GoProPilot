@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
-             xmlns:views="using:GoProPilot.Views"
+             xmlns:view="using:GoProPilot.Views"
              xmlns:vm="using:GoProPilot.ViewModels"
              xmlns:wnd="using:FluentAvalonia.UI.Windowing"
              d:DesignHeight="600"
@@ -164,21 +164,21 @@
 
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Home"
-                                       Tag="{x:Type views:HomeView}">
+                                       Tag="{x:Type view:HomeView}">
                     <ui:NavigationViewItem.Icon>
                         <ui:IconSourceElement IconSource="{DynamicResource HomeIcon}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Media List"
-                                       Tag="{x:Type views:MediaListView}">
+                                       Tag="{x:Type view:MediaListView}">
                     <ui:NavigationViewItem.Icon>
                         <ui:IconSourceElement IconSource="{DynamicResource MediaListIcon}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Downloads"
-                                       Tag="{x:Type views:DownloadView}">
+                                       Tag="{x:Type view:DownloadView}">
                     <ui:NavigationViewItem.Icon>
                         <ui:IconSourceElement IconSource="{DynamicResource DownloadIcon}" />
                     </ui:NavigationViewItem.Icon>
@@ -189,7 +189,7 @@
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Settings"
-                                       Tag="{x:Type views:SettingsView}">
+                                       Tag="{x:Type view:SettingsView}">
                     <ui:NavigationViewItem.Icon>
                         <ui:IconSourceElement IconSource="{DynamicResource SettingsIcon}" />
                     </ui:NavigationViewItem.Icon>

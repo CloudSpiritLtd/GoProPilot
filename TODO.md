@@ -8,4 +8,6 @@
 - [ ] Check saved camera and Wi-Fi devices.
 - [ ] Improve UI.
 - [ ] Support multiple cameras.
+- [ ] Play video preview.
+- [ ] Unit tests.
 - [ ] 
