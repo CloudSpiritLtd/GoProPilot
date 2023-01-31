@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using DryIoc;
 using DynamicData;
+using GoProPilot.Models;
 using GoProPilot.ViewModels;
 using DownloaderSvc = Downloader.DownloadService;
 
@@ -17,7 +18,7 @@ public class DownloadService
     private readonly SettingsViewModel _settingsVM;
     private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
     private readonly DownloaderSvc _downloader = new();
-    private readonly SourceCache<DownloadItem, string> _items = new(_ => _.FileName);
+    private readonly SourceCache<IDownloadItem, string> _items = new(_ => _.FileName);
 
     public DownloadService()
     {
@@ -25,13 +26,13 @@ public class DownloadService
         _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
     }
 
-    public void Add(DownloadItem item)
+    public void Add(IDownloadItem item)
     {
         _items.AddOrUpdate(item);
         StartDownload();
     }
 
-    public IObservable<IChangeSet<DownloadItem, string>> Connect() => _items.Connect();
+    public IObservable<IChangeSet<IDownloadItem, string>> Connect() => _items.Connect();
 
     public void ExecuteCancel()
     {
@@ -48,7 +49,7 @@ public class DownloadService
         _downloader.Resume();
     }
 
-    public void Remove(DownloadItem item)
+    public void Remove(IDownloadItem item)
     {
         UnBindEvents(item);
         _dispatcher.InvokeAsync(() =>
@@ -57,7 +58,7 @@ public class DownloadService
         });
     }
 
-    private void BindEvents(DownloadItem item)
+    private void BindEvents(IDownloadItem item)
     {
         // Provide `FileName` and `TotalBytesToReceive` at the start of each downloads
         _downloader.DownloadStarted += item.OnDownloadStarted;
@@ -111,7 +112,7 @@ public class DownloadService
         }
     }
 
-    private void UnBindEvents(DownloadItem item)
+    private void UnBindEvents(IDownloadItem item)
     {
         // Provide `FileName` and `TotalBytesToReceive` at the start of each downloads
         _downloader.DownloadStarted -= item.OnDownloadStarted;
@@ -133,5 +134,5 @@ public class DownloadService
         _downloader.DownloadFileCompleted -= item.OnDownloadFileCompleted;
     }
 
-    public DownloadItem? Current { get; private set; }
+    public IDownloadItem? Current { get; private set; }
 }

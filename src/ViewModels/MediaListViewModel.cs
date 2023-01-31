@@ -80,7 +80,7 @@ public class MediaListViewModel : ViewModelBase
                                                  {
                                                      Dir = a.Directory,
                                                      FileId = g2.Key,
-                                                     Files = g2,
+                                                     RawFiles = g2,
                                                  },
                                      },
                      };

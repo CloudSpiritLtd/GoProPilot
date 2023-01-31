@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Downloader;
 using DryIoc;
 using DynamicData;
+using GoProPilot.Models;
 using GoProPilot.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -14,12 +15,12 @@ namespace GoProPilot.ViewModels;
 
 public class DownloadViewModel : ViewModelBase
 {
-    private readonly ReadOnlyObservableCollection<DownloadItem> _items;
+    private readonly ReadOnlyObservableCollection<IDownloadItem> _items;
 
     public DownloadViewModel()
     {
-        DownloadManager = Globals.Container.Resolve<Services.DownloadService>();
-        DownloadManager.Connect()
+        DownloadService = Globals.Container.Resolve<Services.DownloadService>();
+        DownloadService.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _items)
             .Subscribe();
@@ -27,20 +28,23 @@ public class DownloadViewModel : ViewModelBase
 #if DEBUG
         if (Design.IsDesignMode)
         {
-            DownloadManager.Add(new()
+            /*
+            DownloadService.Add(new()
             {
                 FileName = "GoPro1.mp4",
                 Url = "http://test.com/gopro1.mp4",
             });
-            DownloadManager.Add(new()
+            DownloadService.Add(new()
             {
                 FileName = "GoPro2.mp4",
                 Url = "http://test.com/gopro2.mp4",
             });
+            */
         }
 #endif
     }
 
+    /*
     public void AddTask(string name, string url)
     {
         var downloadItem = new DownloadItem
@@ -49,15 +53,19 @@ public class DownloadViewModel : ViewModelBase
             Url = url,
         };
 
-        DownloadManager.Add(downloadItem);
+        DownloadService.Add(downloadItem);
     }
+    */
 
-    public Services.DownloadService DownloadManager { get; }
+    public void AddTask(IDownloadItem item) => DownloadService.Add(item);
 
-    public ReadOnlyObservableCollection<DownloadItem> Items { get => _items; }
+    public Services.DownloadService DownloadService { get; }
+
+    public ReadOnlyObservableCollection<IDownloadItem> Items { get => _items; }
 }
 
-public class DownloadItem : ViewModelBase
+[Obsolete]
+public class DownloadItem1 : ViewModelBase, IDownloadItem
 {
     public void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
     {

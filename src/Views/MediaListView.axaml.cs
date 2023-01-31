@@ -29,7 +29,7 @@ public partial class MediaListView : UserControl
         if (sender is HyperlinkButton btn)
             if (btn.Content != null && btn.Tag != null)
             {
-                _downloadVM.AddTask((string)btn.Content, (string)btn.Tag);
+                //_downloadVM.AddTask((string)btn.Content, (string)btn.Tag);
 
                 //Console.WriteLine(btn.Tag);
                 //Application.Current?.Clipboard?.SetTextAsync((string)btn.Tag);

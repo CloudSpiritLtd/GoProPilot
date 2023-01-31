@@ -18,6 +18,12 @@
         <vm:MediaListViewModel />
     </Design.DataContext>-->
 
+    <UserControl.Styles>
+        <Style Selector="ProgressBar#DownloadProgressBar /template/ Border#ProgressBarTrack">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </UserControl.Styles>
+
     <UserControl.Resources>
         <stl:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <conv:MediaFileToThumbnailConverter x:Key="MediaFileToThumbnailConverter" />
@@ -25,26 +31,38 @@
         <!--<conv:GrayscaleConverter x:Key="GrayscaleConverter" />-->
 
         <!--  缩略图下面的链接  -->
-        <DataTemplate x:Key="MediaFileDownloadTemplate" DataType="model:RawMediaFile">
-            <Grid Margin="0,2">
-                <ui:HyperlinkButton Margin="0"
+        <DataTemplate x:Key="MediaFileDownloadTemplate" DataType="model:MediaFile">
+            <Grid Margin="0,0,0,2">
+                <ProgressBar Name="DownloadProgressBar"
+                             Height="20"
+                             Margin="4,0,4,0"
+                             MinWidth="100"
+                             Opacity="0.25"
+                             CornerRadius="0"
+                             Value="{Binding Progress}" />
+
+                <ui:HyperlinkButton Margin="8,0,0,0"
                                     Padding="0"
-                                    Click="MediaFileHyperlink_Click"
-                                    Content="{Binding Name}"
+                                    Command="{Binding DownloadCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content="{Binding Raw.Name}"
                                     FontFamily="Consolas"
                                     FontSize="12">
+                    <!--
                     <ui:HyperlinkButton.Tag>
                         <MultiBinding Converter="{StaticResource MediaFileToDownloadUrlConverter}">
                             <Binding Path="$parent[StackPanel;2].DataContext.Dir" />
-                            <Binding Path="." />
+                            <Binding Path="Raw" />
                         </MultiBinding>
                     </ui:HyperlinkButton.Tag>
+                    -->
                 </ui:HyperlinkButton>
-                <TextBlock HorizontalAlignment="Right"
+                <TextBlock Margin="0,0,8,0"
+                           HorizontalAlignment="Right"
                            VerticalAlignment="Center"
                            FontFamily="Consolas"
                            FontSize="12"
-                           Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" />
+                           Text="{Binding Raw.Size, Converter={StaticResource FileSizeToStringConverter}}" />
             </Grid>
         </DataTemplate>
 
@@ -120,9 +138,11 @@
                     </Button>
                     -->
 
-                    <StackPanel Grid.Row="1" Margin="8,8,8,0">
+                    <StackPanel Grid.Row="1">
                         <!--<TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />-->
-                        <TextBlock FontSize="20" Text="{Binding First.Modified, StringFormat={}{0:HH:mm:ss}}" />
+                        <TextBlock Margin="8,8,8,0"
+                                   FontSize="20"
+                                   Text="{Binding First.Raw.Modified, StringFormat={}{0:HH:mm:ss}}" />
                         <ItemsControl Margin="0,5,0,0"
                                       ItemTemplate="{StaticResource MediaFileDownloadTemplate}"
                                       Items="{Binding Files}" />
