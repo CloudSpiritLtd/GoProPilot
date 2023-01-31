@@ -1,28 +1,28 @@
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using Downloader;
 using DryIoc;
 using DynamicData;
 using GoProPilot.ViewModels;
+using DownloaderSvc = Downloader.DownloadService;
 
 namespace GoProPilot.Services;
 
-public class DownloadManager
+public class DownloadService
 {
-    private readonly SourceCache<DownloadItem, string> _items = new(_ => _.FileName);
-    private readonly ConfigService _configService;
+    private readonly SettingsViewModel _settingsVM;
     private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
-    private readonly DownloadService _downloader = new();
+    private readonly DownloaderSvc _downloader = new();
+    private readonly SourceCache<DownloadItem, string> _items = new(_ => _.FileName);
 
-    public DownloadManager()
+    public DownloadService()
     {
-        _configService = Globals.Container.Resolve<ConfigService>();
         _downloader.DownloadFileCompleted += OnDownloadFileCompleted;
+        _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
     }
 
     public void Add(DownloadItem item)
@@ -106,7 +106,7 @@ public class DownloadManager
             if (!Design.IsDesignMode)
 #endif
             {
-                _downloader.DownloadFileTaskAsync(Current.Url, new DirectoryInfo(_configService.Config.DownloadFolder));
+                _downloader.DownloadFileTaskAsync(Current.Url, new DirectoryInfo(_settingsVM.DownloadFolder));
             }
         }
     }

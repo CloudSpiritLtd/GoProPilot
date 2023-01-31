@@ -18,7 +18,7 @@ public class DownloadViewModel : ViewModelBase
 
     public DownloadViewModel()
     {
-        DownloadManager = Globals.Container.Resolve<DownloadManager>();
+        DownloadManager = Globals.Container.Resolve<Services.DownloadService>();
         DownloadManager.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _items)
@@ -52,7 +52,7 @@ public class DownloadViewModel : ViewModelBase
         DownloadManager.Add(downloadItem);
     }
 
-    public DownloadManager DownloadManager { get; }
+    public Services.DownloadService DownloadManager { get; }
 
     public ReadOnlyObservableCollection<DownloadItem> Items { get => _items; }
 }
