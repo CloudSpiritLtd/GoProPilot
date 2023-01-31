@@ -3,10 +3,10 @@ using ManagedNativeWifi;
 
 namespace GoProPilot.Models;
 
-public abstract class BaseDeviceWrapper<T>
+public abstract class BaseDeviceModel<T>
     where T : class
 {
-    public BaseDeviceWrapper(T device)
+    public BaseDeviceModel(T device)
     {
         RawDevice = device;
     }
@@ -23,18 +23,18 @@ public abstract class BaseDeviceWrapper<T>
     public T RawDevice { get; init; }
 }
 
-public class BluetoothDeviceWrapper : BaseDeviceWrapper<BluetoothDevice>
+public class BluetoothDeviceModel : BaseDeviceModel<BluetoothDevice>
 {
-    public BluetoothDeviceWrapper(BluetoothDevice device) : base(device)
+    public BluetoothDeviceModel(BluetoothDevice device) : base(device)
     {
         DeviceID = device.Id;
         Name = device.Name;
     }
 }
 
-public class WLANDeviceWrapper : BaseDeviceWrapper<InterfaceInfo>
+public class WLANDeviceModel : BaseDeviceModel<InterfaceInfo>
 {
-    public WLANDeviceWrapper(InterfaceInfo device) : base(device)
+    public WLANDeviceModel(InterfaceInfo device) : base(device)
     {
         DeviceID = device.Id.ToString();
         Name = device.Description;

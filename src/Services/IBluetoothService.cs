@@ -6,5 +6,5 @@ namespace GoProPilot.Services;
 
 public interface IBluetoothService
 {
-    IObservable<IChangeSet<BluetoothDeviceWrapper, string>> Connect();
+    IObservable<IChangeSet<BluetoothDeviceModel, string>> Connect();
 }

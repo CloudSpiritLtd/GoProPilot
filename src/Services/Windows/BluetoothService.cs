@@ -9,14 +9,14 @@ namespace GoProPilot.Services.Windows;
 // For Windows, macOS
 public class BluetoothService : IBluetoothService
 {
-    private readonly SourceCache<BluetoothDeviceWrapper, string> _devices = new(_ => _.DeviceID);
+    private readonly SourceCache<BluetoothDeviceModel, string> _devices = new(_ => _.DeviceID);
 
     public BluetoothService()
     {
         Load();
     }
 
-    public IObservable<IChangeSet<BluetoothDeviceWrapper, string>> Connect() => _devices.Connect();
+    public IObservable<IChangeSet<BluetoothDeviceModel, string>> Connect() => _devices.Connect();
 
     private async void Load()
     {
@@ -31,7 +31,7 @@ public class BluetoothService : IBluetoothService
 
         foreach (var d in await Bluetooth.GetPairedDevicesAsync())
         {
-            _devices.AddOrUpdate(new BluetoothDeviceWrapper(d));
+            _devices.AddOrUpdate(new BluetoothDeviceModel(d));
         }
     }
 }

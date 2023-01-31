@@ -10,14 +10,14 @@ namespace GoProPilot.Services.Windows;
 // For Windows only
 public class WLANService : IWLANService
 {
-    private readonly SourceCache<WLANDeviceWrapper, string> _devices = new(_ => _.DeviceID);
+    private readonly SourceCache<WLANDeviceModel, string> _devices = new(_ => _.DeviceID);
 
     public WLANService()
     {
         Load();
     }
 
-    public IObservable<IChangeSet<WLANDeviceWrapper, string>> Connect() => _devices.Connect();
+    public IObservable<IChangeSet<WLANDeviceModel, string>> Connect() => _devices.Connect();
 
     private void Load()
     {
@@ -31,7 +31,7 @@ public class WLANService : IWLANService
 
         foreach (var d in intfs)
         {
-            _devices.AddOrUpdate(new WLANDeviceWrapper(d));
+            _devices.AddOrUpdate(new WLANDeviceModel(d));
         }
     }
 }
