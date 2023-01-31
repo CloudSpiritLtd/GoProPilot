@@ -1,14 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using DryIoc;
 using DynamicData;
 using GoProPilot.Models;
-using GoProPilot.Services.Windows;
+using GoProPilot.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -16,16 +16,18 @@ namespace GoProPilot.ViewModels;
 
 public class SettingsViewModel : ViewModelBase
 {
-    private readonly ReadOnlyObservableCollection<BluetoothDeviceWrapper> _bluetoothDevices;
+    private readonly ReadOnlyObservableCollection<BluetoothDeviceModel> _bluetoothDevices;
+    private readonly Config _config;
     private readonly ConfigService _configService;
-    private readonly ReadOnlyObservableCollection<WLANDeviceWrapper> _wlanDevices;
+    private readonly ReadOnlyObservableCollection<WLANDeviceModel> _wlanDevices;
 
     public SettingsViewModel()
     {
         _configService = Globals.Container.Resolve<ConfigService>();
-        DownloadFolder = _configService.Config.DownloadFolder;
+        _config = _configService.Config;
+        DownloadFolder = _config.DownloadFolder;
 
-        var bthService = new BluetoothService();
+        var bthService = Globals.Container.Resolve<IBluetoothService>(OSPlatform.Windows);
         bthService.Connect()
 
             // Ensure the updates arrive on the UI thread.
@@ -34,68 +36,62 @@ public class SettingsViewModel : ViewModelBase
             // We .Bind() and now our mutable _bluetoothDevices collection
             // contains the new items and the GUI gets refreshed.
             .Bind(out _bluetoothDevices)
-            .Subscribe();
+            .Subscribe(_ =>
+            {
+                CurrentBluetooth = _bluetoothDevices.Where(_ => _.DeviceID == _config.CameraDeviceID).FirstOrDefault();
+            });
 
-        var wlanService = new WLANService();
+        var wlanService = Globals.Container.Resolve<IWLANService>(OSPlatform.Windows);
         wlanService.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _wlanDevices)
-            .Subscribe();
-
-        ((INotifyCollectionChanged)_bluetoothDevices).CollectionChanged += BluetoothDevices_Changed;
-        ((INotifyCollectionChanged)_wlanDevices).CollectionChanged += WLANDevices_Changed;
+            .Subscribe(_ =>
+            {
+                CurrentWLAN = _wlanDevices.Where(_ => _.DeviceID == _config.WLANDeviceID).FirstOrDefault();
+            });
 
         TestCommand = ReactiveCommand.Create(ExecuteTest);
 
-        PropertyChanged += DoPropertyChanged;
-    }
+        /*
+        this.WhenAnyValue(_ => _.CurrentBluetooth, _ => _.CurrentWLAN, _ => _.DownloadFolder)
+            .Subscribe(a =>
+            {
+                if (!_loading)
+                {
+                    _config.CameraDeviceID = a.Item1?.DeviceID;
+                    _config.WLANDeviceID = a.Item2?.DeviceID;
+                    _config.DownloadFolder = a.Item3;
+                }
+            });
+        */
 
-    public void SaveSettings()
-    {
-        if (CurrentWLAN != null)
-            _configService.Config.WLANDeviceID = CurrentWLAN.DeviceID;
-        if (CurrentBluetooth != null)
-            _configService.Config.CameraDeviceID = CurrentBluetooth.DeviceID;
-        _configService.Config.DownloadFolder = DownloadFolder;
+        this.WhenAnyValue(_ => _.CurrentBluetooth)
+            .Subscribe(a => _config.CameraDeviceID = a?.DeviceID);
 
-        _configService.Save();
-    }
+        this.WhenAnyValue(_ => _.CurrentWLAN)
+            .Subscribe(a => _config.WLANDeviceID = a?.DeviceID);
 
-    private void BluetoothDevices_Changed(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        CurrentBluetooth = _bluetoothDevices.Where(_ => _.DeviceID == _configService.Config.CameraDeviceID).FirstOrDefault();
-    }
-
-    private void DoPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        SaveSettings();
+        this.WhenAnyValue(_ => _.DownloadFolder)
+            .Subscribe(a => _config.DownloadFolder = a);
     }
 
     private void ExecuteTest()
     {
-        if (_wlanDevices.Any())
-        {
-            CurrentWLAN = _wlanDevices.First();
-        }
+        _configService.Save();
     }
 
-    private void WLANDevices_Changed(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        CurrentWLAN = _wlanDevices.Where(_ => _.DeviceID == _configService.Config.WLANDeviceID).FirstOrDefault();
-    }
-
-    public ReadOnlyObservableCollection<BluetoothDeviceWrapper> BluetoothDevices => _bluetoothDevices;
+    public ReadOnlyObservableCollection<BluetoothDeviceModel> BluetoothDevices => _bluetoothDevices;
 
     [Reactive]
-    public BluetoothDeviceWrapper? CurrentBluetooth { get; set; }
+    public BluetoothDeviceModel? CurrentBluetooth { get; set; }
 
     [Reactive]
-    public WLANDeviceWrapper? CurrentWLAN { get; set; }
+    public WLANDeviceModel? CurrentWLAN { get; set; }
 
     [Reactive]
-    public string DownloadFolder { get; set; } = "";
+    public string DownloadFolder { get; set; }
 
     public ReactiveCommand<Unit, Unit> TestCommand { get; }
 
-    public ReadOnlyObservableCollection<WLANDeviceWrapper> WLANDevices => _wlanDevices;
+    public ReadOnlyObservableCollection<WLANDeviceModel> WLANDevices => _wlanDevices;
 }

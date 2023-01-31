@@ -13,7 +13,7 @@ public static class Globals
     {
         Container = new Container();
         Container.Register<ConfigService>(Reuse.Singleton);
-        Container.Register<DownloadManager>(Reuse.Singleton);
+        Container.Register<DownloadService>(Reuse.Singleton);
         Container.Register<IBluetoothService, Services.Windows.BluetoothService>(Reuse.Singleton, serviceKey: OSPlatform.Windows);
         Container.Register<IWLANService, Services.Windows.WLANService>(Reuse.Singleton, serviceKey: OSPlatform.Windows);
         Container.Register<ICameraService, Services.Windows.CameraService>(Reuse.Singleton, serviceKey: OSPlatform.Windows);
@@ -26,5 +26,11 @@ public static class Globals
 
     public static void Init()
     {
+        var cfgSvc = Container.Resolve<ConfigService>();
+        cfgSvc.Load();
+
+        //todo: detect platform
+        Container.Resolve<IBluetoothService>(OSPlatform.Windows);
+        Container.Resolve<IWLANService>(OSPlatform.Windows);
     }
 }

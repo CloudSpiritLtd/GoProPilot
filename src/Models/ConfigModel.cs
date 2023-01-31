@@ -1,20 +1,18 @@
 using Newtonsoft.Json;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace GoProPilot.Models;
 
-public class Config : ReactiveObject
+public class Config
 {
+    [JsonProperty("ver")]
+    public string Version { get; } = "1.0";
+
     [JsonProperty("camera")]
-    [Reactive]
-    public string CameraDeviceID { get; set; } = "";
+    public string? CameraDeviceID { get; set; }
 
     [JsonProperty("downloadFolder")]
-    [Reactive]
-    public string DownloadFolder { get; set; } = "";
+    public string DownloadFolder { get; set; } = ".\\Download";
 
     [JsonProperty("wlan")]
-    [Reactive]
-    public string WLANDeviceID { get; set; } = "";
+    public string? WLANDeviceID { get; set; }
 }

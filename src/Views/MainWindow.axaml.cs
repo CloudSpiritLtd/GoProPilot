@@ -1,13 +1,16 @@
-using System.Runtime.InteropServices;
 using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
-using FluentAvalonia.Styling;
-using FluentAvalonia.UI.Windowing;
-using Avalonia.Media;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using DryIoc;
+using FluentAvalonia.Styling;
 using FluentAvalonia.UI.Media;
+using FluentAvalonia.UI.Windowing;
+using GoProPilot.ViewModels;
 
 namespace GoProPilot.Views;
 
@@ -66,13 +69,17 @@ public partial class MainWindow : AppWindow
         }
     }
 
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
     private void TryEnableMicaEffect(FluentAvaloniaTheme theme)
     {
-
         // The background colors for the Mica brush are still based around SolidBackgroundFillColorBase resource
         // BUT since we can't control the actual Mica brush color, we have to use the window background to create
         // the same effect. However, we can't use SolidBackgroundFillColorBase directly since its opaque, and if
-        // we set the opacity the color become lighter than we want. So we take the normal color, darken it and 
+        // we set the opacity the color become lighter than we want. So we take the normal color, darken it and
         // apply the opacity until we get the roughly the correct color
         // NOTE that the effect still doesn't look right, but it suffices. Ideally we need access to the Mica
         // CompositionBrush to properly change the color but I don't know if we can do that or not
@@ -95,8 +102,8 @@ public partial class MainWindow : AppWindow
         }
     }
 
-    private void InitializeComponent()
+    private void Window_Closing(object? sender, CancelEventArgs e)
     {
-        AvaloniaXamlLoader.Load(this);
+        Globals.Container.Resolve<ConfigService>().Save();
     }
 }
