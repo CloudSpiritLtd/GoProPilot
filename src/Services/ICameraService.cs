@@ -21,5 +21,5 @@ public interface ICameraService
 
     string? WifiSSID { get; }
 
-    event EventHandler<bool>? APStateChanged;
+    event EventHandler<bool> APStateChanged;
 }

@@ -169,7 +169,7 @@ public class MainViewModel : ViewModelBase
 
     private void SetupCamera()
     {
-        Camera = new CameraService(_settingsVM.CurrentBluetooth.RawDevice);
+        Camera = new CameraService(_settingsVM.CurrentBluetooth!.RawDevice);
         Camera.APStateChanged += Camera_APStateChanged;
     }
 

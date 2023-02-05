@@ -316,5 +316,5 @@ public class CameraService : ICameraService
 
     public string? WifiSSID { get; private set; }
 
-    public event EventHandler<bool>? APStateChanged;
+    public event EventHandler<bool> APStateChanged = delegate { };
 }

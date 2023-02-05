@@ -30,10 +30,11 @@ internal class Program
             .UsePlatformDetect()
             .LogToTrace()
             .UseReactiveUI()
-            .With(new Win32PlatformOptions()
+            .With(new Win32PlatformOptions
             {
+                UseCompositor = true,
                 UseWindowsUIComposition = true,
-                CompositionBackdropCornerRadius = 8f
+                CompositionBackdropCornerRadius = 8f,
             })
             .UseFAWindowing();
     }
