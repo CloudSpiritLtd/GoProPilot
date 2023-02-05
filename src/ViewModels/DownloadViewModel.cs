@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using Avalonia.Controls;
-using Downloader;
 using DryIoc;
 using DynamicData;
 using GoProPilot.Models;
 using GoProPilot.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using DownloadStatus = Downloader.DownloadStatus;
 
 namespace GoProPilot.ViewModels;
 
@@ -19,7 +19,7 @@ public class DownloadViewModel : ViewModelBase
 
     public DownloadViewModel()
     {
-        DownloadService = Globals.Container.Resolve<Services.DownloadService>();
+        DownloadService = Globals.Container.Resolve<DownloadService>();
         DownloadService.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _items)
@@ -57,9 +57,9 @@ public class DownloadViewModel : ViewModelBase
     }
     */
 
-    public void AddTask(IDownloadItem item) => DownloadService.Add(item);
+    //public void AddTask(IDownloadItem item) => DownloadService.Add(item);
 
-    public Services.DownloadService DownloadService { get; }
+    public DownloadService DownloadService { get; }
 
     public ReadOnlyObservableCollection<IDownloadItem> Items { get => _items; }
 }
@@ -73,12 +73,12 @@ public class DownloadItem1 : ViewModelBase, IDownloadItem
         Status = DownloadStatus.Completed;
     }
 
-    public void OnDownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
+    public void OnDownloadProgressChanged(object? sender, Downloader.DownloadProgressChangedEventArgs e)
     {
         Progress = (int)e.ProgressPercentage;
     }
 
-    public void OnDownloadStarted(object? sender, DownloadStartedEventArgs e)
+    public void OnDownloadStarted(object? sender, Downloader.DownloadStartedEventArgs e)
     {
         Status = DownloadStatus.Running;
     }

@@ -1,3 +1,4 @@
+using DryIoc;
 using DryIoc.ImTools;
 using GoProPilot.Models;
 using GoProPilot.Services;
@@ -14,15 +15,27 @@ namespace GoProPilot.ViewModels;
 public class MediaListViewModel : ViewModelBase
 {
     private const string MOCK_GET_MEDIA_LIST = "Mock.WebApi.GetMediaList.json";
+    private readonly DownloadService _downloadSvc;
 
     public MediaListViewModel()
     {
+        _downloadSvc = Globals.Container.Resolve<DownloadService>();
+        DownloadCommand = ReactiveCommand.Create<MediaFile>(ExecuteDownload);
         GetMediasCommand = ReactiveCommand.Create(ExecuteGetMedias);
 
 #if DEBUG
-        System.Diagnostics.Debug.WriteLine("MediaListViewModel.ctor");
         LoadMockData();
 #endif
+    }
+
+    private void ExecuteDownload(MediaFile file)
+    {
+        if (file.Status == Downloader.DownloadStatus.None)
+        {
+            //todo: delete old file then add task
+            _downloadSvc.Add(file);
+            file.IsWaitingDownload = true;
+        }
     }
 
     private async void ExecuteGetMedias()
@@ -41,13 +54,13 @@ public class MediaListViewModel : ViewModelBase
 #if DEBUG
     private void LoadMockData()
     {
-        //System.Diagnostics.Debug.WriteLine(Environment.CurrentDirectory);
+        System.Diagnostics.Debug.WriteLine(Environment.CurrentDirectory);
         if (File.Exists(MOCK_GET_MEDIA_LIST))
         {
+            System.Diagnostics.Debug.WriteLine("Found mock file for MediaListView");
             //System.Windows.MessageBox.Show("!");
             using var sr = new StreamReader(MOCK_GET_MEDIA_LIST);
             var str = sr.ReadToEnd();
-            //System.Diagnostics.Debug.WriteLine(str);
 
             Medias = ParseMediaListJson(str);
         }
@@ -87,6 +100,8 @@ public class MediaListViewModel : ViewModelBase
 
         return medias.ToArray();
     }
+
+    public ReactiveCommand<MediaFile, Unit> DownloadCommand { get; }
 
     public ReactiveCommand<Unit, Unit> GetMediasCommand { get; }
 

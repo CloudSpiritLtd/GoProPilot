@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Windows;
-using Downloader;
-using DryIoc;
+using Avalonia.Controls;
 using GoProPilot.Services;
 using GoProPilot.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using DownloadStatus = Downloader.DownloadStatus;
 
 namespace GoProPilot.Models;
 
@@ -44,24 +43,26 @@ public class ChapteredFile : ViewModelBase
 
     public string FileId { get; init; } = "";
 
+    public IList<MediaFile> Files { get; init; } = new List<MediaFile>();
+
+    public MediaFile? First
+    {
+        get { return Files.Count > 0 ? Files[0] : null; }
+    }
+
     public IEnumerable<RawMediaFile> RawFiles
     {
         get => _rawFiles;
-        set { 
-            _rawFiles= value;
+
+        set
+        {
+            _rawFiles = value;
             Files.Clear();
             foreach (var item in value)
             {
                 Files.Add(new MediaFile(Dir, item));
             }
         }
-    }
-
-    public IList<MediaFile> Files { get; init; } = new List<MediaFile>();
-
-    public MediaFile? First
-    {
-        get { return Files.Count > 0 ? Files[0] : null; }
     }
 }
 
@@ -87,50 +88,51 @@ public class MediaDirectory
 
 public class MediaFile : ViewModelBase, IDownloadItem
 {
-    private readonly DownloadViewModel _downloadVM;
-    private string _url;
-
     public MediaFile(string dir, RawMediaFile raw)
     {
-        _downloadVM = Globals.Container.Resolve<DownloadViewModel>();
-        _url = $"http://10.5.5.9:8080/videos/DCIM/{dir}/{raw.Name}";
         Raw = raw;
-        DownloadCommand = ReactiveCommand.Create(ExecuteDownload);
+        ThumbnailUrl = $"http://10.5.5.9:8080/gopro/media/thumbnail?path={dir}/{raw.Name}";
+        Url = $"http://10.5.5.9:8080/videos/DCIM/{dir}/{raw.Name}";
+
+#if DEBUG
+        if (Design.IsDesignMode)
+        {
+            ThumbnailUrl = "../Assets/Mock.Thumbnail.jpg";
+        }
+#endif
     }
 
-    private void ExecuteDownload()
-    {
-        _downloadVM.AddTask(this);
-    }
-
-    public void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
+    void IDownloadItem.OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
     {
         // todo: test e.Cancelled, e.Error
         Status = DownloadStatus.Completed;
     }
 
-    public void OnDownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
+    void IDownloadItem.OnDownloadProgressChanged(object? sender, Downloader.DownloadProgressChangedEventArgs e)
     {
-        Progress = (int)e.ProgressPercentage;
+        ((IDownloadItem)this).Progress = (int)e.ProgressPercentage;
     }
 
-    public void OnDownloadStarted(object? sender, DownloadStartedEventArgs e)
+    void IDownloadItem.OnDownloadStarted(object? sender, Downloader.DownloadStartedEventArgs e)
     {
+        IsWaitingDownload = false;
         Status = DownloadStatus.Running;
     }
-
-    public ReactiveCommand<Unit, Unit> DownloadCommand { get; }
 
     public string FileName { get => Raw.Name; }
 
     [Reactive]
     public int Progress { get; set; } = 0;
 
+    public RawMediaFile Raw { get; }
+
     [Reactive]
     public DownloadStatus Status { get; set; } = DownloadStatus.None;
 
-    public string Url { get => _url; }
+    [Reactive]
+    public bool IsWaitingDownload { get; set; }
 
+    public string Url { get; }
 
-    public RawMediaFile Raw { get; }
+    public string ThumbnailUrl { get; }
 }

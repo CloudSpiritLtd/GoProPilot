@@ -1,10 +1,10 @@
 using System;
 using System.ComponentModel;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using Downloader;
 using DryIoc;
 using DynamicData;
 using GoProPilot.Models;
@@ -17,11 +17,16 @@ public class DownloadService
 {
     private readonly SettingsViewModel _settingsVM;
     private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
-    private readonly DownloaderSvc _downloader = new();
+    private readonly DownloaderSvc _downloader;
     private readonly SourceCache<IDownloadItem, string> _items = new(_ => _.FileName);
 
     public DownloadService()
     {
+        var cfg = new DownloadConfiguration
+        {
+            ReserveStorageSpaceBeforeStartingDownload= true,
+        };
+        _downloader = new(cfg);
         _downloader.DownloadFileCompleted += OnDownloadFileCompleted;
         _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
     }
@@ -91,6 +96,8 @@ public class DownloadService
             {
                 _items.Remove(Current);
             });
+
+            Current = null;
         }
 
         StartDownload();
@@ -98,7 +105,7 @@ public class DownloadService
 
     private void StartDownload()
     {
-        if (_items.Count > 0)
+        if (Current == null && _items.Count > 0)
         {
             Current = _items.Items.First();
             BindEvents(Current);
