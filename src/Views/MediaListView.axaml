@@ -22,6 +22,19 @@
         <Style Selector="ProgressBar#DownloadProgressBar /template/ Border#ProgressBarTrack">
             <Setter Property="IsVisible" Value="False" />
         </Style>
+
+        <Style Selector="Border.ChapteredFileBorder">
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.ChapteredFileBorder Border">
+            <Setter Property="BorderBrush" Value="LightGray" />
+        </Style>
+        <Style Selector="Border[IsPointerOver=true].ChapteredFileBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
+        </Style>
+        <Style Selector="Border[IsPointerOver=true].ChapteredFileBorder Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
+        </Style>
     </UserControl.Styles>
 
     <UserControl.Resources>
@@ -48,16 +61,7 @@
                                     CommandParameter="{Binding}"
                                     Content="{Binding Raw.Name}"
                                     FontFamily="Consolas"
-                                    FontSize="12">
-                    <!--
-                    <ui:HyperlinkButton.Tag>
-                        <MultiBinding Converter="{StaticResource MediaFileToDownloadUrlConverter}">
-                            <Binding Path="$parent[StackPanel;2].DataContext.Dir" />
-                            <Binding Path="Raw" />
-                        </MultiBinding>
-                    </ui:HyperlinkButton.Tag>
-                    -->
-                </ui:HyperlinkButton>
+                                    FontSize="12" />
                 <TextBlock Margin="0,0,8,0"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Center"
@@ -104,34 +108,28 @@
 
         <!--  文件组的模板，包含时间、缩略图、下载链接  -->
         <DataTemplate x:Key="ChapteredFileTemplate" DataType="model:ChapteredFile">
+            <!-- 双层边框的 CornerRadius，因为 Avalonia 的渲染问题，导致不够完美。期待后续 Avalonia 更新。 -->
             <Border Margin="0,0,10,10"
-                    BorderBrush="LightGray"
-                    BorderThickness="1"
-                    ClipToBounds="True"
+                    Background="Transparent"
+                    BorderThickness="4"
+                    Classes="ChapteredFileBorder"
                     CornerRadius="8"
                     IsEnabled="{Binding !Deleted}">
-                <!--<Grid Effect="{Binding Deleted, Converter={StaticResource GrayscaleConverter}}">-->
-                <Grid ClipToBounds="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <Border BorderThickness="1"
+                        ClipToBounds="True"
+                        CornerRadius="6">
+                    <!--<Grid Effect="{Binding Deleted, Converter={StaticResource GrayscaleConverter}}">-->
+                    <Grid ClipToBounds="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <asyncImageLoader:AdvancedImage Width="160"
-                                                    Height="120"
-                                                    Source="{Binding First.ThumbnailUrl}">
-                        <!--
-                        <asyncImageLoader:AdvancedImage.Source>
-                            <MultiBinding Converter="{StaticResource MediaFileToThumbnailConverter}">
-                                <Binding Path="$parent[StackPanel;1].DataContext.Dir" />
-                                <Binding Path="First" />
-                            </MultiBinding>
-                        </asyncImageLoader:AdvancedImage.Source>
-                        -->
-                    </asyncImageLoader:AdvancedImage>
-
-                    <!-- TODO: Play media file
+                        <asyncImageLoader:AdvancedImage Width="160"
+                                                        Height="120"
+                                                        Source="{Binding First.ThumbnailUrl}" />
+                        <!-- TODO: Play media file
                     <Button Grid.Row="0"
                             Margin="0,0,16,-20"
                             HorizontalAlignment="Right"
@@ -139,38 +137,40 @@
                             Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
                         <md:PackIcon Kind="Play" />
                     </Button>
-                    -->
+                        -->
 
-                    <StackPanel Grid.Row="1">
-                        <!--<TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />-->
-                        <TextBlock Margin="8,8,8,0"
-                                   FontSize="20"
-                                   Text="{Binding First.Raw.Modified, StringFormat={}{0:HH:mm:ss}}" />
-                        <ItemsControl Margin="0,5,0,0"
-                                      ItemTemplate="{StaticResource MediaFileDownloadTemplate}"
-                                      Items="{Binding Files}" />
-                    </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <!--<TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="{Binding First.Modified, StringFormat=HH:mm:ss}" />-->
+                            <TextBlock Margin="8,8,8,0"
+                                       FontSize="20"
+                                       Text="{Binding First.Raw.Modified, StringFormat={}{0:HH:mm:ss}}" />
+                            <ItemsControl Margin="0,5,0,0"
+                                          ItemTemplate="{StaticResource MediaFileDownloadTemplate}"
+                                          Items="{Binding Files}" />
+                        </StackPanel>
 
-                    <DockPanel Grid.Row="2"
-                               Margin="8"
-                               HorizontalAlignment="Stretch"
-                               LastChildFill="False">
-                        <TextBlock VerticalAlignment="Center"
-                                   DockPanel.Dock="Left"
-                                   FontWeight="Bold"
-                                   Foreground="Red"
-                                   IsVisible="{Binding Deleted}"
-                                   Text="Deleted !" />
-                        <Button Width="30"
-                                Padding="2,0,2,0"
-                                Command="{Binding DeleteCommand}"
-                                DockPanel.Dock="Right"
-                                Foreground="Red"
-                                IsVisible="{Binding !Deleted}">
-                            <ui:SymbolIcon Symbol="Delete" />
-                        </Button>
-                    </DockPanel>
-                </Grid>
+                        <DockPanel Grid.Row="2"
+                                   Margin="8"
+                                   HorizontalAlignment="Stretch"
+                                   LastChildFill="False">
+                            <TextBlock VerticalAlignment="Center"
+                                       DockPanel.Dock="Left"
+                                       FontWeight="Bold"
+                                       Foreground="Red"
+                                       IsVisible="{Binding Deleted}"
+                                       Text="Deleted !" />
+                            <Button Width="30"
+                                    Height="30"
+                                    Padding="2,0,2,0"
+                                    Command="{Binding DeleteCommand}"
+                                    DockPanel.Dock="Right"
+                                    Foreground="Red"
+                                    IsVisible="{Binding !Deleted}">
+                                <ui:SymbolIcon Symbol="Delete" />
+                            </Button>
+                        </DockPanel>
+                    </Grid>
+                </Border>
             </Border>
         </DataTemplate>
 
@@ -193,7 +193,7 @@
         <DataTemplate x:Key="MediaDirectoryTemplate" DataType="{x:Type model:MediaDirectory}">
             <StackPanel Name="RootPanel" Orientation="Vertical">
                 <!--<TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}" Text="{Binding Dir}" />-->
-                <TextBlock FontSize="48" Text="{Binding Dir}" />
+                <TextBlock FontSize="36" Text="{Binding Dir}" />
                 <ItemsControl ItemTemplate="{StaticResource FileGroupTemplate}" Items="{Binding FileLists}">
                     <!-- 使用下面的模板，可以让多个日期显示在一行上。
                     <ItemsControl.ItemsPanel>
@@ -207,21 +207,30 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <DockPanel>
+        <Border BorderBrush="Silver"
+                BorderThickness="0,0,0,1"
+                DockPanel.Dock="Top">
+            <Grid Margin="10,2">
+                <TextBlock HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Text="Media List" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Command="{Binding GetMediasCommand}">
+                        <ui:SymbolIcon Width="24"
+                                       Height="24"
+                                       Symbol="Refresh" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl Padding="10"
                           ItemTemplate="{StaticResource MediaDirectoryTemplate}"
                           Items="{Binding Medias}" />
         </ScrollViewer>
-
-        <Button Margin="32,24,32,24"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Command="{Binding GetMediasCommand}">
-            <ui:SymbolIcon Width="24"
-                           Height="24"
-                           Symbol="Refresh" />
-        </Button>
-    </Grid>
-
+    </DockPanel>
 </UserControl>
