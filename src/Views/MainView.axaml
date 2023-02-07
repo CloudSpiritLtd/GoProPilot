@@ -75,7 +75,7 @@
                                          Height="28"
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center">
-                                    <ContentPresenter Name="Icon" Content="{TemplateBinding Icon}" />
+                                    <ContentPresenter Name="Icon" Content="{Binding TemplateSettings.Icon, RelativeSource={RelativeSource TemplatedParent}}" />
                                 </Viewbox>
 
                             </DockPanel>
@@ -160,40 +160,28 @@
                            PaneDisplayMode="Left">
 
             <ui:NavigationView.MenuItems>
-                <!-- Navigator Items -->
+                <!--  Navigator Items  -->
 
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Home"
-                                       Tag="{x:Type view:HomeView}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:IconSourceElement IconSource="{DynamicResource HomeIcon}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
+                                       IconSource="{DynamicResource HomeIcon}"
+                                       Tag="{x:Type view:HomeView}" />
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Media List"
-                                       Tag="{x:Type view:MediaListView}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:IconSourceElement IconSource="{DynamicResource MediaListIcon}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
+                                       IconSource="{DynamicResource MediaListIcon}"
+                                       Tag="{x:Type view:MediaListView}" />
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Downloads"
-                                       Tag="{x:Type view:DownloadView}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:IconSourceElement IconSource="{DynamicResource DownloadIcon}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
+                                       IconSource="{DynamicResource DownloadIcon}"
+                                       Tag="{x:Type view:DownloadView}" />
 
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Classes="AppNav"
                                        Content="Settings"
-                                       Tag="{x:Type view:SettingsView}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:IconSourceElement IconSource="{DynamicResource SettingsIcon}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
+                                       IconSource="{DynamicResource SettingsIcon}"
+                                       Tag="{x:Type view:SettingsView}" />
             </ui:NavigationView.FooterMenuItems>
 
             <Panel>

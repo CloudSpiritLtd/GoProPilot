@@ -7,7 +7,7 @@ namespace GoProPilot;
 
 public class ViewLocator : IDataTemplate
 {
-    public IControl Build(object? data)
+    public Control Build(object? data)
     {
         if (data == null)
             return new TextBlock { Text = "Not Found: data is null" };

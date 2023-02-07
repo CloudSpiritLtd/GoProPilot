@@ -32,7 +32,7 @@ internal class Program
             .UseReactiveUI()
             .With(new Win32PlatformOptions
             {
-                UseCompositor = false,      // Disable to make ClipToBounds work correctly. But will it affect something?
+                //UseCompositor = false,      // Disable to make ClipToBounds work correctly. But will it affect something?
                 UseWindowsUIComposition = true,
                 CompositionBackdropCornerRadius = 8f,
             })
