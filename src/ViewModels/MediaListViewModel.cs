@@ -16,12 +16,14 @@ public class MediaListViewModel : ViewModelBase
 {
     private const string MOCK_GET_MEDIA_LIST = "Mock.WebApi.GetMediaList.json";
     private readonly DownloadService _downloadSvc;
+    private readonly SettingsViewModel _settingsVM;
 
     public MediaListViewModel()
     {
         _downloadSvc = Globals.Container.Resolve<DownloadService>();
+        _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
         DownloadCommand = ReactiveCommand.Create<MediaFile>(ExecuteDownload);
-        GetMediasCommand = ReactiveCommand.Create(ExecuteGetMedias);
+        RefreshCommand = ReactiveCommand.Create(ExecuteRefresh);
 
 #if DEBUG
         LoadMockData();
@@ -32,13 +34,16 @@ public class MediaListViewModel : ViewModelBase
     {
         if (file.Status == Downloader.DownloadStatus.None)
         {
-            //todo: delete old file then add task
+            var fullPath = Path.Join(_settingsVM.DownloadFolder, file.FileName);
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
+
             _downloadSvc.Add(file);
             file.IsWaitingDownload = true;
         }
     }
 
-    private async void ExecuteGetMedias()
+    private async void ExecuteRefresh()
     {
         try
         {
@@ -103,7 +108,7 @@ public class MediaListViewModel : ViewModelBase
 
     public ReactiveCommand<MediaFile, Unit> DownloadCommand { get; }
 
-    public ReactiveCommand<Unit, Unit> GetMediasCommand { get; }
+    public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
 
     [Reactive]
     public MediaDirectory[] Medias { get; set; } = Array.Empty<MediaDirectory>();
