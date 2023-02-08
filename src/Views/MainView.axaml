@@ -134,6 +134,7 @@
                     -->
                     <Button Name="ConnectButton"
                             Margin="0,0,10,0"
+                            IsEnabled="{Binding !IsConnecting}"
                             VerticalAlignment="Center"
                             Command="{Binding ConnectCommand}"
                             Content="{Binding ConnectButtonText}" />

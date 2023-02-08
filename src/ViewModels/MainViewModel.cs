@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DryIoc;
-using FluentAvalonia.UI.Controls;
 using GoProPilot.Services;
 using GoProPilot.Services.Windows;
 using ManagedNativeWifi;
@@ -17,11 +16,13 @@ namespace GoProPilot.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private readonly SettingsViewModel _settingsVM;
     private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
+    private readonly MediaListViewModel _mediaListViewModel;
+    private readonly SettingsViewModel _settingsVM;
 
     public MainViewModel()
     {
+        _mediaListViewModel = Globals.Container.Resolve<MediaListViewModel>();
         _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
         _settingsVM.PropertyChanged += SettingsVM_PropertyChanged;
 
@@ -140,14 +141,28 @@ public class MainViewModel : ViewModelBase
             return;
         }
 
-        if (IsConnected)
+        IsConnecting = true;
+        try
         {
-            DisconnectAsync();
+            if (IsConnected)
+            {
+                DisconnectAsync();
+            }
+            else
+            {
+                await ConnectBluetoothAsync();
+                await ConnectWiFiAsync();
+                if (IsConnected)
+                {
+#pragma warning disable CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
+                    _mediaListViewModel.RefreshCommand.Execute();
+#pragma warning restore CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
+                }
+            }
         }
-        else
+        finally
         {
-            await ConnectBluetoothAsync();
-            await ConnectWiFiAsync();
+            IsConnecting = false;
         }
     }
 
@@ -194,6 +209,9 @@ public class MainViewModel : ViewModelBase
 
     [Reactive]
     public bool IsConnected { get; private set; }
+
+    [Reactive]
+    public bool IsConnecting { get; private set; }
 
     [Reactive]
     public bool ShowToast { get; set; }
