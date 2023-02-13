@@ -17,12 +17,12 @@ namespace GoProPilot.ViewModels;
 public class MainViewModel : ViewModelBase
 {
     private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
-    private readonly MediaListViewModel _mediaListViewModel;
+    private readonly MediaListViewModel _mediaListVM;
     private readonly SettingsViewModel _settingsVM;
 
     public MainViewModel()
     {
-        _mediaListViewModel = Globals.Container.Resolve<MediaListViewModel>();
+        _mediaListVM = Globals.Container.Resolve<MediaListViewModel>();
         _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
         _settingsVM.PropertyChanged += SettingsVM_PropertyChanged;
 
@@ -155,7 +155,7 @@ public class MainViewModel : ViewModelBase
                 await Task.Delay(500);
                 if (IsConnected)
                 {
-                    _mediaListViewModel.RefreshCommand.Execute().Subscribe();
+                    _mediaListVM.RefreshCommand.Execute().Subscribe();
                 }
             }
         }

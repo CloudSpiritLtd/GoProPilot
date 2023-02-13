@@ -1,7 +1,6 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using DryIoc;
 using FluentAvalonia.UI.Controls;
 using GoProPilot.ViewModels;
@@ -17,11 +16,6 @@ public partial class MediaListView : UserControl
         InitializeComponent();
         DataContext = Globals.Container.Resolve<MediaListViewModel>();
         _downloadVM = Globals.Container.Resolve<DownloadViewModel>();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void MediaFileHyperlink_Click(object sender, RoutedEventArgs e)

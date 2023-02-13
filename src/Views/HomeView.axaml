@@ -38,6 +38,8 @@
                 <TextBlock TextWrapping="Wrap">
                     <x:String xml:space="preserve">
 For first time use, please go to "Settings" page, select your camera and WLAN interface, and set download folder.
+
+Currently, after connecting to the camera, you need switch to "Media List" page manaully.
                         </x:String>
                 </TextBlock>
             </StackPanel>

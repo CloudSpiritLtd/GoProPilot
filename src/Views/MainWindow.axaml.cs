@@ -65,11 +65,6 @@ public partial class MainWindow : AppWindow
         }
     }
 
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
-
     private void TryEnableMicaEffect()
     {
         // The background colors for the Mica brush are still based around SolidBackgroundFillColorBase resource

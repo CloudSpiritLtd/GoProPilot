@@ -12,12 +12,10 @@ namespace GoProPilot.Views;
 
 public partial class MainView : UserControl, INavigationService
 {
-    private Frame? _frameView;
-    private NavigationView? _navView;
-
     public MainView()
     {
         InitializeComponent();
+        NavView.ItemInvoked += OnNavigationViewItemInvoked;
 
         DataContext = Globals.Container.Resolve<MainViewModel>();
         Globals.Container.RegisterInstance<INavigationService>(this, IfAlreadyRegistered.Replace);
@@ -25,29 +23,18 @@ public partial class MainView : UserControl, INavigationService
 
     public void NavigateTo(Type type)
     {
-        _frameView?.Navigate(typeof(HomeView));
+        FrameView.Navigate(type);
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
 
-        _frameView = this.FindControl<Frame>("FrameView");
-        _navView = this.FindControl<NavigationView>("NavView");
-        if (_navView != null)
-        {
-            //_navView.MenuItems = GetNavigationViewItems();
-            //_navView.FooterMenuItems = GetFooterNavigationViewItems();
-            _navView.ItemInvoked += OnNavigationViewItemInvoked;
+        //_frameView = this.FindControl<Frame>("FrameView");
+        //_navView = this.FindControl<NavigationView>("NavView");
 
-            _navView.SelectedItem = _navView.MenuItems.Cast<NavigationViewItem>().FirstOrDefault();
-            _frameView?.Navigate(typeof(HomeView));
-        }
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
+        NavView.SelectedItem = NavView.MenuItems.Cast<NavigationViewItem>().FirstOrDefault();
+        FrameView.Navigate(typeof(HomeView));
     }
 
     private void OnNavigationViewItemInvoked(object? sender, NavigationViewItemInvokedEventArgs e)
@@ -57,7 +44,7 @@ public partial class MainView : UserControl, INavigationService
 
         if (e.InvokedItemContainer is NavigationViewItem nvi && nvi.Tag is Type t)
         {
-            _frameView?.Navigate(t, null, e.RecommendedNavigationTransitionInfo);
+            FrameView.Navigate(t, null, e.RecommendedNavigationTransitionInfo);
         }
     }
 }

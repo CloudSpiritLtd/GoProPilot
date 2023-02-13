@@ -12,11 +12,5 @@ namespace GoProPilot.Views
             InitializeComponent();
             DataContext = Globals.Container.Resolve<DownloadViewModel>();
         }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
-
     }
 }
