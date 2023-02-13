@@ -5,6 +5,8 @@
         <Product>GoProPilot</Product>
         <Description>GoPro Media Manager</Description>
         <PackageId>GoProPilot</PackageId>
+        <FileVersion>1.0.2302.0</FileVersion>
+        <VersionPrefix>1.0.0</VersionPrefix>
 
         <OutputType>WinExe</OutputType>
         <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
