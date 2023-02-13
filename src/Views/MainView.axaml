@@ -134,19 +134,22 @@
                     -->
                     <Button Name="ConnectButton"
                             Margin="0,0,10,0"
-                            IsEnabled="{Binding !IsConnecting}"
                             VerticalAlignment="Center"
                             Command="{Binding ConnectCommand}"
-                            Content="{Binding ConnectButtonText}" />
+                            Content="{Binding ConnectButtonText}"
+                            IsEnabled="{Binding !IsConnecting}" />
                     <ui:SymbolIcon FontSize="24"
                                    Foreground="{Binding CameraState, Converter={StaticResource StateToColorConverter}}"
-                                   Symbol="Camera" />
+                                   Symbol="Camera"
+                                   ToolTip.Tip="Bluetooth status" />
                     <ui:SymbolIcon FontSize="24"
                                    Foreground="{Binding WifiAPState, Converter={StaticResource StateToColorConverter}}"
-                                   Symbol="TargetFilled" />
+                                   Symbol="TargetFilled"
+                                   ToolTip.Tip="Camera Wi-Fi AP Status" />
                     <ui:SymbolIcon FontSize="24"
                                    Foreground="{Binding WifiState, Converter={StaticResource StateToColorConverter}}"
-                                   Symbol="Wifi4" />
+                                   Symbol="Wifi4"
+                                   ToolTip.Tip="Wi-Fi Status" />
                 </StackPanel>
             </Border>
         </Grid>

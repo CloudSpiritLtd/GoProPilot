@@ -152,11 +152,10 @@ public class MainViewModel : ViewModelBase
             {
                 await ConnectBluetoothAsync();
                 await ConnectWiFiAsync();
+                await Task.Delay(500);
                 if (IsConnected)
                 {
-#pragma warning disable CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
-                    _mediaListViewModel.RefreshCommand.Execute();
-#pragma warning restore CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
+                    _mediaListViewModel.RefreshCommand.Execute().Subscribe();
                 }
             }
         }
