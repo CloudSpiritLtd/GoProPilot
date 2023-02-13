@@ -106,11 +106,12 @@ public class MediaFile : ViewModelBase, IDownloadItem
     {
         // todo: test e.Cancelled, e.Error
         Status = DownloadStatus.Completed;
+        Progress = 0;
     }
 
     void IDownloadItem.OnDownloadProgressChanged(object? sender, Downloader.DownloadProgressChangedEventArgs e)
     {
-        ((IDownloadItem)this).Progress = (int)e.ProgressPercentage;
+        Progress = (int)e.ProgressPercentage;
     }
 
     void IDownloadItem.OnDownloadStarted(object? sender, Downloader.DownloadStartedEventArgs e)
