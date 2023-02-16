@@ -13,12 +13,20 @@
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
 
+    <!-- Make sure $(SolutionDir) is under "/src" -->
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <OutputPath>..\bin\Debug</OutputPath>
+        <OutputPath>$(SolutionDir)..\bin\Debug</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <OutputPath>..\bin\Release</OutputPath>
+        <OutputPath>$(SolutionDir)..\bin\Release</OutputPath>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="Starlex.Avalonia">
+            <HintPath>$(SolutionDir)..\deps\Starlex.Avalonia.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 
 </Project>
