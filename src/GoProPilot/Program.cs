@@ -1,6 +1,8 @@
 ﻿using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.ReactiveUI;
+using Avalonia.Threading;
 using DryIoc;
 using FluentAvalonia.UI.Windowing;
 using GoProPilot.ViewModels;
@@ -16,6 +18,9 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        Core.IsDesignMode = Design.IsDesignMode;
+        Core.MainThreadInvokeAsync = a => Dispatcher.UIThread.InvokeAsync(a);
+
         Globals.Init();
 
         BuildAvaloniaApp()

@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Linq;
-using Avalonia.Controls;
 using DryIoc;
 using DynamicData;
 using GoProPilot.Models;
@@ -19,14 +18,14 @@ public class DownloadViewModel : ViewModelBase
 
     public DownloadViewModel()
     {
-        DownloadService = Globals.Container.Resolve<DownloadService>();
+        DownloadService = Core.Container.Resolve<DownloadService>();
         DownloadService.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _items)
             .Subscribe();
 
 #if DEBUG
-        if (Design.IsDesignMode)
+        if (Core.IsDesignMode)
         {
             /*
             DownloadService.Add(new()

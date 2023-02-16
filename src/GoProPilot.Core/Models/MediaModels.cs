@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Windows;
-using Avalonia.Controls;
 using GoProPilot.Services;
 using GoProPilot.ViewModels;
 using ReactiveUI;
@@ -28,7 +27,8 @@ public class ChapteredFile : ViewModelBase
     private async void ExecuteDelete()
     {
         if (Deleted
-            || MessageBox.Show("Are you sure to delete?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            //todo: || MessageBox.Show("Are you sure to delete?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No
+            )
             return;
 
         await WebApi.Instance.DeleteMediaFiles(Dir, Files.Select(_ => _.Raw.Name));
@@ -95,7 +95,7 @@ public class MediaFile : ViewModelBase, IDownloadItem
         Url = $"http://10.5.5.9:8080/videos/DCIM/{dir}/{raw.Name}";
 
 #if DEBUG
-        if (Design.IsDesignMode)
+        if (Core.IsDesignMode)
         {
             ThumbnailUrl = "../Assets/Mock.Thumbnail.jpg";
         }

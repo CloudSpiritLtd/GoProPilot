@@ -20,8 +20,8 @@ public class MediaListViewModel : ViewModelBase
 
     public MediaListViewModel()
     {
-        _downloadSvc = Globals.Container.Resolve<DownloadService>();
-        _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
+        _downloadSvc = Core.Container.Resolve<DownloadService>();
+        _settingsVM = Core.Container.Resolve<SettingsViewModel>();
         DownloadCommand = ReactiveCommand.Create<MediaFile>(ExecuteDownload);
         RefreshCommand = ReactiveCommand.Create(ExecuteRefresh);
 
