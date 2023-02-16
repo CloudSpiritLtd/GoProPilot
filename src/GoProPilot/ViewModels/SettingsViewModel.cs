@@ -23,11 +23,11 @@ public class SettingsViewModel : ViewModelBase
 
     public SettingsViewModel()
     {
-        _configService = Globals.Container.Resolve<ConfigService>();
+        _configService = Core.Container.Resolve<ConfigService>();
         _config = _configService.Config;
         DownloadFolder = _config.DownloadFolder;
 
-        var bthService = Globals.Container.Resolve<IBluetoothService>(OSPlatform.Windows);
+        var bthService = Core.Container.Resolve<IBluetoothService>(OSPlatform.Windows);
         bthService.Connect()
 
             // Ensure the updates arrive on the UI thread.
@@ -41,7 +41,7 @@ public class SettingsViewModel : ViewModelBase
                 CurrentBluetooth = _bluetoothDevices.Where(_ => _.DeviceID == _config.CameraDeviceID).FirstOrDefault();
             });
 
-        var wlanService = Globals.Container.Resolve<IWLANService>(OSPlatform.Windows);
+        var wlanService = Core.Container.Resolve<IWLANService>(OSPlatform.Windows);
         wlanService.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _wlanDevices)

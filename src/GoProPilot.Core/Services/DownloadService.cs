@@ -2,8 +2,6 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using Avalonia.Controls;
-using Avalonia.Threading;
 using Downloader;
 using DryIoc;
 using DynamicData;
@@ -15,8 +13,7 @@ namespace GoProPilot.Services;
 
 public class DownloadService
 {
-    private readonly SettingsViewModel _settingsVM;
-    private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
+    private readonly ConfigService _cfgSvc;
     private readonly DownloaderSvc _downloader;
     private readonly SourceCache<IDownloadItem, string> _items = new(_ => _.FileName);
 
@@ -28,7 +25,7 @@ public class DownloadService
         };
         _downloader = new(cfg);
         _downloader.DownloadFileCompleted += OnDownloadFileCompleted;
-        _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
+        _cfgSvc = Core.Container.Resolve<ConfigService>();
     }
 
     public void Add(IDownloadItem item)
@@ -57,7 +54,7 @@ public class DownloadService
     public void Remove(IDownloadItem item)
     {
         UnBindEvents(item);
-        _dispatcher.InvokeAsync(() =>
+        Core.MainThreadInvokeAsync(() =>
         {
             _items.Remove(item);
         });
@@ -92,7 +89,7 @@ public class DownloadService
         if (Current != null)
         {
             UnBindEvents(Current);
-            await _dispatcher.InvokeAsync(() =>
+            await Core.MainThreadInvokeAsync(() =>
             {
                 _items.Remove(Current);
             });
@@ -111,10 +108,10 @@ public class DownloadService
             BindEvents(Current);
 
 #if DEBUG
-            if (!Design.IsDesignMode)
+            if (!Core.IsDesignMode)
 #endif
             {
-                _downloader.DownloadFileTaskAsync(Current.Url, new DirectoryInfo(_settingsVM.DownloadFolder));
+                _downloader.DownloadFileTaskAsync(Current.Url, new DirectoryInfo(_cfgSvc.Config.DownloadFolder));
             }
         }
     }

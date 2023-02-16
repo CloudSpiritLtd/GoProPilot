@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using DryIoc;
 using GoProPilot.Services;
 using GoProPilot.Services.Windows;
@@ -16,14 +15,13 @@ namespace GoProPilot.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private readonly Dispatcher _dispatcher = Dispatcher.UIThread;
     private readonly MediaListViewModel _mediaListVM;
     private readonly SettingsViewModel _settingsVM;
 
     public MainViewModel()
     {
-        _mediaListVM = Globals.Container.Resolve<MediaListViewModel>();
-        _settingsVM = Globals.Container.Resolve<SettingsViewModel>();
+        _mediaListVM = Core.Container.Resolve<MediaListViewModel>();
+        _settingsVM = Core.Container.Resolve<SettingsViewModel>();
         _settingsVM.PropertyChanged += SettingsVM_PropertyChanged;
 
         ConnectCommand = ReactiveCommand.Create(ExecuteConnect);
@@ -44,7 +42,7 @@ public class MainViewModel : ViewModelBase
 
     private void Camera_APStateChanged(object? sender, bool e)
     {
-        _dispatcher.InvokeAsync(() =>
+        Core.MainThreadInvokeAsync(() =>
         {
             WifiAPState = e ? State.Active : State.Inactive;
         });

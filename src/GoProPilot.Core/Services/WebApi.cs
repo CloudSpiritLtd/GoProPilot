@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Timers;
+//using System.Timers;
 using GoProPilot.Models;
 using Newtonsoft.Json;
 
@@ -14,11 +14,11 @@ public class WebApi
     public static readonly WebApi Instance = new();
 
     private readonly HttpClient _httpClient = new();
-    private readonly Timer _keepAliveTimer;
+    private readonly System.Timers.Timer _keepAliveTimer;
 
     private WebApi()
     {
-        _keepAliveTimer = new Timer(3000);
+        _keepAliveTimer = new System.Timers.Timer(3000);
         _keepAliveTimer.Elapsed += (_, _) =>
         {
             _httpClient.GetAsync("http://10.5.5.9:8080/gopro/camera/keep_alive");

@@ -7,30 +7,21 @@ namespace GoProPilot;
 
 public static class Globals
 {
-    public static readonly IContainer Container;
-
     static Globals()
     {
-        Container = new Container();
-        Container.Register<ConfigService>(Reuse.Singleton);
-        Container.Register<DownloadService>(Reuse.Singleton);
-        Container.Register<IBluetoothService, Services.Windows.BluetoothService>(Reuse.Singleton, serviceKey: OSPlatform.Windows);
-        Container.Register<IWLANService, Services.Windows.WLANService>(Reuse.Singleton, serviceKey: OSPlatform.Windows);
-        Container.Register<ICameraService, Services.Windows.CameraService>(Reuse.Singleton, serviceKey: OSPlatform.Windows);
-
-        Container.Register<MainViewModel>(Reuse.Singleton);
-        Container.Register<SettingsViewModel>(Reuse.Singleton);
-        Container.Register<MediaListViewModel>(Reuse.Singleton);
-        Container.Register<DownloadViewModel>(Reuse.Singleton);
+        Core.Container.Register<MainViewModel>(Reuse.Singleton);
+        Core.Container.Register<SettingsViewModel>(Reuse.Singleton);
+        Core.Container.Register<MediaListViewModel>(Reuse.Singleton);
+        Core.Container.Register<DownloadViewModel>(Reuse.Singleton);
     }
 
     public static void Init()
     {
-        var cfgSvc = Container.Resolve<ConfigService>();
+        var cfgSvc = Core.Container.Resolve<ConfigService>();
         cfgSvc.Load();
 
         //todo: detect platform
-        Container.Resolve<IBluetoothService>(OSPlatform.Windows);
-        Container.Resolve<IWLANService>(OSPlatform.Windows);
+        Core.Container.Resolve<IBluetoothService>(OSPlatform.Windows);
+        Core.Container.Resolve<IWLANService>(OSPlatform.Windows);
     }
 }
