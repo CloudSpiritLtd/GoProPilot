@@ -1,12 +1,9 @@
 using System;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using Downloader;
 using DryIoc;
 using DynamicData;
 using GoProPilot.Models;
-using GoProPilot.ViewModels;
 using DownloaderSvc = Downloader.DownloadService;
 
 namespace GoProPilot.Services;
@@ -19,13 +16,13 @@ public class DownloadService
 
     public DownloadService()
     {
+        _cfgSvc = Core.Container.Resolve<ConfigService>();
         var cfg = new DownloadConfiguration
         {
             ReserveStorageSpaceBeforeStartingDownload= true,
         };
         _downloader = new(cfg);
         _downloader.DownloadFileCompleted += OnDownloadFileCompleted;
-        _cfgSvc = Core.Container.Resolve<ConfigService>();
     }
 
     public void Add(IDownloadItem item)

@@ -20,8 +20,8 @@ public class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        _mediaListVM = Core.Container.Resolve<MediaListViewModel>();
-        _settingsVM = Core.Container.Resolve<SettingsViewModel>();
+        _mediaListVM = Core.Container.Resolve<MediaListViewModel>(IfUnresolved.ReturnDefault);
+        _settingsVM = Core.Container.Resolve<SettingsViewModel>(IfUnresolved.ReturnDefault);
         _settingsVM.PropertyChanged += SettingsVM_PropertyChanged;
 
         ConnectCommand = ReactiveCommand.Create(ExecuteConnect);
@@ -66,8 +66,9 @@ public class MainViewModel : ViewModelBase
     {
         if (CameraState != State.Active)
         {
-            await Utils.ShowErrorMessageAsync("Camera not connected");
-            return;
+            //await Utils.ShowErrorMessageAsync("Camera not connected");
+            //return;
+            throw new Exception("Camera not connected");
         }
 
         var timeout = TimeSpan.FromSeconds(30);
@@ -135,8 +136,9 @@ public class MainViewModel : ViewModelBase
         if (_settingsVM.CurrentBluetooth == null || _settingsVM.CurrentWLAN == null)
         {
             //todo: use INavigationService, auto nav to settings page.
-            await Utils.ShowErrorMessageAsync("You need to select proper devices in Settings page first.");
-            return;
+            //await Utils.ShowErrorMessageAsync("You need to select proper devices in Settings page first.");
+            //return;
+            throw new Exception("You need to select proper devices in Settings page first.");
         }
 
         IsConnecting = true;

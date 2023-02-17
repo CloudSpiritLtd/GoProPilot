@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
@@ -6,6 +8,7 @@ using Avalonia.Threading;
 using DryIoc;
 using FluentAvalonia.UI.Windowing;
 using GoProPilot.ViewModels;
+using ReactiveUI;
 using Starlex.Avalonia.Converters;
 
 namespace GoProPilot;
@@ -16,15 +19,27 @@ internal class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Core.IsDesignMode = Design.IsDesignMode;
         Core.MainThreadInvokeAsync = a => Dispatcher.UIThread.InvokeAsync(a);
 
         Globals.Init();
 
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        RxApp.DefaultExceptionHandler = Observer.Create<Exception>(async ex =>
+        {
+            await Utils.ShowErrorMessageAsync(ex.Message);
+        });
+
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex)
+        {
+            await Utils.ShowErrorMessageAsync(ex.Message);
+        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

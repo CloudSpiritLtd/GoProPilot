@@ -21,7 +21,7 @@ public class MediaListViewModel : ViewModelBase
     public MediaListViewModel()
     {
         _downloadSvc = Core.Container.Resolve<DownloadService>();
-        _settingsVM = Core.Container.Resolve<SettingsViewModel>();
+        _settingsVM = Core.Container.Resolve<SettingsViewModel>(IfUnresolved.ReturnDefault);
         DownloadCommand = ReactiveCommand.Create<MediaFile>(ExecuteDownload);
         RefreshCommand = ReactiveCommand.Create(ExecuteRefresh);
 
@@ -52,7 +52,8 @@ public class MediaListViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await Utils.ShowErrorMessageAsync(ex.Message);
+            //await Utils.ShowErrorMessageAsync(ex.Message);
+            throw;
         }
     }
 

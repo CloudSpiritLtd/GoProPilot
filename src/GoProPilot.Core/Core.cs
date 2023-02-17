@@ -7,7 +7,7 @@ namespace GoProPilot;
 public static class Core
 {
     public static readonly IContainer Container;
-  
+
     static Core()
     {
         Container = new Container();
@@ -19,5 +19,6 @@ public static class Core
     }
 
     public static bool IsDesignMode { get; set; }
+
     public static Func<Action, Task> MainThreadInvokeAsync { get; set; } = delegate { return Task.Delay(0); };
 }
