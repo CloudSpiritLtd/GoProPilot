@@ -1,0 +1,35 @@
+﻿<Window x:Class="GoProPilot.SetupDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:GoProPilot"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mnw="clr-namespace:ManagedNativeWifi;assembly=ManagedNativeWifi"
+        xmlns:vm="clr-namespace:GoProPilot.ViewModels;assembly=GoProPilot.Core"
+        Title="SetupDialog"
+        Width="800"
+        Height="450"
+        mc:Ignorable="d">
+    <d:Window.DataContext>
+        <vm:SettingsViewModel />
+    </d:Window.DataContext>
+    <Grid>
+        <StackPanel Margin="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <TextBlock Text="WLAN Interfaces" />
+            <ListBox ItemsSource="{Binding Interfaces}"
+                     SelectedValue="{Binding SelectedWLANInterfaceId}"
+                     SelectedValuePath="Id">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type mnw:InterfaceInfo}">
+                        <StackPanel Margin="5">
+                            <TextBlock FontSize="16" Text="{Binding Description}" />
+                            <TextBlock Foreground="Gray" Text="{Binding State}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</Window>

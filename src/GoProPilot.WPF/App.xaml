@@ -1,0 +1,25 @@
+﻿<Application x:Class="GoProPilot.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GoProPilot"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:stl="http://starlex.ixvin.com/winfx/xaml"
+             Startup="Application_Startup"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <md:BundledTheme BaseTheme="Light"
+                                 ColorAdjustment="{md:ColorAdjustment}"
+                                 PrimaryColor="Blue"
+                                 SecondaryColor="Cyan" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <stl:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <stl:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

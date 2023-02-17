@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>GoProPilot.WPF</PackageId>
+        <RootNamespace>GoProPilot</RootNamespace>
+
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+        <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <StartupObject>GoProPilot.Program</StartupObject>
+
+        <DefineConstants>WPF</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="Models\**" />
+        <Compile Remove="Properties\**" />
+        <Compile Remove="ViewModels.old\**" />
+        <EmbeddedResource Remove="Models\**" />
+        <EmbeddedResource Remove="Properties\**" />
+        <EmbeddedResource Remove="ViewModels.old\**" />
+        <None Remove="Models\**" />
+        <None Remove="Properties\**" />
+        <None Remove="ViewModels.old\**" />
+        <Page Remove="Models\**" />
+        <Page Remove="Properties\**" />
+        <Page Remove="ViewModels.old\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Config.cs" />
+        <Compile Remove="DownloadManager.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
+        <!--<PackageReference Include="Prism.Core" Version="8.1.97" />-->
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\GoProPilot.Core\GoProPilot.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Starlex.Wpf">
+            <HintPath>$(SolutionDir)..\deps\Starlex.Wpf.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>

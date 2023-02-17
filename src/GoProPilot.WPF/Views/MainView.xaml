@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="GoProPilot.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:GoProPilot.Converters"
+             xmlns:vm="clr-namespace:GoProPilot.ViewModels;assembly=GoProPilot.Core"
+             xmlns:view="clr-namespace:GoProPilot.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <d:UserControl.DataContext>
+        <vm:MainViewModel />
+    </d:UserControl.DataContext>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <conv:BoolToColorConverter x:Key="BoolToColorConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel>
+        <Border BorderBrush="LightGray"
+                BorderThickness="0,0,0,1"
+                DockPanel.Dock="Top">
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="10,0,10,0" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                        <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                            <Setter Property="Margin" Value="0,0,10,0" />
+                        </Style>
+                    </ResourceDictionary>
+                </StackPanel.Resources>
+
+                <ComboBox Width="150"
+                          Margin="0,0,10,0"
+                          DisplayMemberPath="Name"
+                          FontSize="16"
+                          FontWeight="Bold"
+                          ItemsSource="{Binding Devices}"
+                          SelectedItem="{Binding CameraVM, Mode=TwoWay}" />
+                <!--  connection status and wifi status  -->
+
+                <Button Command="{Binding ConnectCommand}" Content="Connect" />
+                <Button Command="{Binding DisconnectCommand}" Content="Disconnect" />
+
+                <TextBlock Text="Connected:" />
+                <Border Width="16"
+                        Height="16"
+                        BorderThickness="8"
+                        CornerRadius="8">
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="{Binding CameraVM.Connected, Converter={StaticResource BoolToColorConverter}}" />
+                    </Border.BorderBrush>
+                </Border>
+
+                <TextBlock Text="Wifi AP:" />
+                <Border Width="16"
+                        Height="16"
+                        BorderThickness="8"
+                        CornerRadius="8">
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="{Binding CameraVM.WifiAPActive, Converter={StaticResource BoolToColorConverter}}" />
+                    </Border.BorderBrush>
+                </Border>
+
+                <TextBlock Text="Wifi:" />
+                <Border Width="16"
+                        Height="16"
+                        Margin="0,0,10,0"
+                        BorderThickness="8"
+                        CornerRadius="8">
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="{Binding WifiConnected, Converter={StaticResource BoolToColorConverter}}" />
+                    </Border.BorderBrush>
+                </Border>
+
+                <Button Click="SetupBtnClick" Content="Setup" />
+            </StackPanel>
+        </Border>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+            <view:MediaListView DataContext="{Binding MediaListVM}" />
+            <GridSplitter Grid.Column="1"
+                          Width="5"
+                          HorizontalAlignment="Left" />
+            <!--<views:DownloadView Grid.Column="1"
+                                Margin="5,0,0,0"
+                                DataContext="{Binding DownloadVM}" />-->
+        </Grid>
+    </DockPanel>
+</UserControl>

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoProPilot.WPF", "GoProPilot.WPF\GoProPilot.WPF.csproj", "{83DF6E59-209D-414B-AF03-152EFEE077B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{BC2DC24C-1200-4385-B610-F9A445BE76A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC2DC24C-1200-4385-B610-F9A445BE76A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC2DC24C-1200-4385-B610-F9A445BE76A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83DF6E59-209D-414B-AF03-152EFEE077B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83DF6E59-209D-414B-AF03-152EFEE077B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83DF6E59-209D-414B-AF03-152EFEE077B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83DF6E59-209D-414B-AF03-152EFEE077B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
