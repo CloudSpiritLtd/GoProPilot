@@ -14,22 +14,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="Models\**" />
         <Compile Remove="Properties\**" />
         <Compile Remove="ViewModels.old\**" />
-        <EmbeddedResource Remove="Models\**" />
         <EmbeddedResource Remove="Properties\**" />
         <EmbeddedResource Remove="ViewModels.old\**" />
-        <None Remove="Models\**" />
         <None Remove="Properties\**" />
         <None Remove="ViewModels.old\**" />
-        <Page Remove="Models\**" />
         <Page Remove="Properties\**" />
         <Page Remove="ViewModels.old\**" />
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="Config.cs" />
         <Compile Remove="DownloadManager.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Include="..\GoProPilot\Converters\StateToColorConverter.cs" Link="Converters\StateToColorConverter.cs" />
     </ItemGroup>
 
     <ItemGroup>

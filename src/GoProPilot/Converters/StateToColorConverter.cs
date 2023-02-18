@@ -1,7 +1,15 @@
 ﻿using System;
 using System.Globalization;
+
+#if AVALONIA
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+#endif
+
+#if WPF
+using System.Windows.Data;
+using System.Windows.Media;
+#endif
 
 namespace GoProPilot.Converters;
 

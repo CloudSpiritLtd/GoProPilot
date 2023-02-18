@@ -22,4 +22,7 @@ public static class Globals
         Container.Resolve<IBluetoothService>(OSPlatform.Windows);
         Container.Resolve<IWLANService>(OSPlatform.Windows);
     }
+
+    public static NavigationViewModel NavigationVM { get; } = new NavigationViewModel();
+
 }
