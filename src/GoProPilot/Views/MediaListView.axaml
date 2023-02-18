@@ -39,8 +39,6 @@
 
     <UserControl.Resources>
         <stl:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
-        <conv:MediaFileToThumbnailConverter x:Key="MediaFileToThumbnailConverter" />
-        <conv:MediaFileToDownloadUrlConverter x:Key="MediaFileToDownloadUrlConverter" />
         <!--<conv:GrayscaleConverter x:Key="GrayscaleConverter" />-->
 
         <!--  缩略图下面的链接  -->
