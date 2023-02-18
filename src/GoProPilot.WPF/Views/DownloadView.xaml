@@ -16,7 +16,7 @@
     </d:UserControl.DataContext>
 
     <UserControl.Resources>
-        <conv:DownloadStateToIconConverter x:Key="DownloadStateToIconConverter" />
+        <!--<conv:DownloadStateToIconConverter x:Key="DownloadStateToIconConverter" />-->
 
         <DataTemplate x:Key="DownloadItemTemplate" DataType="local:DownloadItem">
             <StackPanel Margin="10">
@@ -24,7 +24,8 @@
                     <TextBlock Margin="0,0,0,5"
                                VerticalAlignment="Center"
                                Text="{Binding FileName}" />
-                    <md:PackIcon HorizontalAlignment="Right" Kind="{Binding Status, Converter={StaticResource DownloadStateToIconConverter}}" />
+                    <!--<md:PackIcon HorizontalAlignment="Right" Kind="{Binding Status, Converter={StaticResource DownloadStateToIconConverter}}" />-->
+                    <md:PackIcon HorizontalAlignment="Right" Kind="{Binding Status}" />
                 </Grid>
                 <ProgressBar Height="10"
                              Maximum="100"

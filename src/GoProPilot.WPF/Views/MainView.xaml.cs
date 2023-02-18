@@ -25,10 +25,7 @@ namespace GoProPilot.Views
         public MainView()
         {
             InitializeComponent();
-            if (!Core.IsDesignMode)
-            {
-                DataContext = Core.Container.Resolve<MainViewModel>();
-            }
+            DataContext = Globals.Container.Resolve<MainViewModel>();
         }
 
         private void SetupBtnClick(object sender, RoutedEventArgs e)

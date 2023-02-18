@@ -1,13 +1,15 @@
 ﻿<UserControl x:Class="GoProPilot.Views.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:conv="clr-namespace:GoProPilot.Converters"
-             xmlns:vm="clr-namespace:GoProPilot.ViewModels;assembly=GoProPilot.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:view="clr-namespace:GoProPilot.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:vm="clr-namespace:GoProPilot.ViewModels;assembly=GoProPilot.Core"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
     <d:UserControl.DataContext>
         <vm:MainViewModel />
     </d:UserControl.DataContext>
@@ -80,18 +82,38 @@
             </StackPanel>
         </Border>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="300" />
-            </Grid.ColumnDefinitions>
-            <view:MediaListView DataContext="{Binding MediaListVM}" />
-            <GridSplitter Grid.Column="1"
-                          Width="5"
-                          HorizontalAlignment="Left" />
-            <!--<views:DownloadView Grid.Column="1"
-                                Margin="5,0,0,0"
-                                DataContext="{Binding DownloadVM}" />-->
-        </Grid>
+        <TabControl md:NavigationRailAssist.ShowSelectionBackground="True"
+                    SnapsToDevicePixels="True"
+                    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                    TabStripPlacement="Left">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <md:PackIcon Width="24"
+                                     Height="24"
+                                     HorizontalAlignment="Center"
+                                     Kind="Home" />
+                        <TextBlock HorizontalAlignment="Center" Text="Home" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock Margin="0,0,0,8"
+                           Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                           Text="Home" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <md:PackIcon Width="24"
+                                     Height="24"
+                                     HorizontalAlignment="Center"
+                                     Kind="Images" />
+                        <TextBlock HorizontalAlignment="Center" Text="Media List" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <!--<view:MediaListView DataContext="{Binding MediaListVM}" />-->
+                <view:MediaListView />
+            </TabItem>
+        </TabControl>
     </DockPanel>
 </UserControl>
