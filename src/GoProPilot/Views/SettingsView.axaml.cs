@@ -10,7 +10,7 @@ namespace GoProPilot.Views
         {
             InitializeComponent();
 
-            DataContext = Core.Container.Resolve<SettingsViewModel>();
+            DataContext = Globals.Container.Resolve<SettingsViewModel>();
         }
     }
 }

@@ -17,8 +17,8 @@ public partial class MainView : UserControl, INavigationService
         InitializeComponent();
         NavView.ItemInvoked += OnNavigationViewItemInvoked;
 
-        DataContext = Core.Container.Resolve<MainViewModel>();
-        Core.Container.RegisterInstance<INavigationService>(this, IfAlreadyRegistered.Replace);
+        DataContext = Globals.Container.Resolve<MainViewModel>();
+        Globals.Container.RegisterInstance<INavigationService>(this, IfAlreadyRegistered.Replace);
     }
 
     public void NavigateTo(Type type)

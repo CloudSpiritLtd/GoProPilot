@@ -10,7 +10,7 @@ namespace GoProPilot.Views
         public DownloadView()
         {
             InitializeComponent();
-            DataContext = Core.Container.Resolve<DownloadViewModel>();
+            DataContext = Globals.Container.Resolve<DownloadViewModel>();
         }
     }
 }

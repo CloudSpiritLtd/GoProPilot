@@ -14,8 +14,8 @@ public partial class MediaListView : UserControl
     public MediaListView()
     {
         InitializeComponent();
-        DataContext = Core.Container.Resolve<MediaListViewModel>();
-        _downloadVM = Core.Container.Resolve<DownloadViewModel>();
+        DataContext = Globals.Container.Resolve<MediaListViewModel>();
+        _downloadVM = Globals.Container.Resolve<DownloadViewModel>();
     }
 
     private void MediaFileHyperlink_Click(object sender, RoutedEventArgs e)

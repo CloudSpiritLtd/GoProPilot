@@ -97,6 +97,6 @@ public partial class MainWindow : AppWindow
 
     private void Window_Closing(object? sender, WindowClosingEventArgs e)
     {
-        Core.Container.Resolve<ConfigService>().Save();
+        Globals.Container.Resolve<ConfigService>().Save();
     }
 }
