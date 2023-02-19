@@ -31,12 +31,29 @@
         <OutputPath>$(SolutionDir)..\bin\Release</OutputPath>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <WeaverConfiguration>
+            <Weavers>
+                <ReactiveUI />
+            </Weavers>
+        </WeaverConfiguration>
+    </PropertyGroup>
+
     <ItemGroup>
+        <PackageReference Include="Costura.Fody" Version="5.7.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="DynamicData" Version="7.12.11" />
+        <PackageReference Include="Fody" Version="6.6.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Downloader" Version="3.0.3" />
         <PackageReference Include="DryIoc.dll" Version="5.3.3" />
-        <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.30" />
-        <PackageReference Include="ManagedNativeWifi" Version="2.5.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="ReactiveUI" Version="18.4.22" />
+        <PackageReference Include="ReactiveUI.Fody" Version="18.4.22" />
     </ItemGroup>
 
 </Project>

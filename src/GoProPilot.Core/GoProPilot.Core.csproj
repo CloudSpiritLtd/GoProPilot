@@ -12,27 +12,10 @@
         <None Remove=".gitignore" />
         <None Remove="Mock.*.json" />
     </ItemGroup>
-    
-    <PropertyGroup>
-        <WeaverConfiguration>
-            <Weavers>
-                <ReactiveUI />
-            </Weavers>
-        </WeaverConfiguration>
-    </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Costura.Fody" Version="5.7.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="DynamicData" Version="7.12.11" />
-        <PackageReference Include="Fody" Version="6.6.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="ReactiveUI" Version="18.4.20" />
-        <PackageReference Include="ReactiveUI.Fody" Version="18.4.20" />
+        <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.30" />
+        <PackageReference Include="ManagedNativeWifi" Version="2.5.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -49,6 +32,10 @@
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
             <CustomToolNamespace>GoProPilot</CustomToolNamespace>
         </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\Linux\" />
     </ItemGroup>
 
 </Project>
