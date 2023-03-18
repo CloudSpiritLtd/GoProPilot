@@ -99,7 +99,9 @@ public class MediaListViewModel : ViewModelBase
                                                  {
                                                      Dir = a.Directory,
                                                      FileId = g2.Key,
-                                                     RawFiles = g2,
+                                                     RawFiles = from rawFile in g2
+                                                                orderby rawFile.Name ascending
+                                                                select rawFile,
                                                  },
                                      },
                      };
