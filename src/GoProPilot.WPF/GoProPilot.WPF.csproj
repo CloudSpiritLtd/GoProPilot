@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
         <!--<PackageReference Include="Prism.Core" Version="8.1.97" />-->
     </ItemGroup>
 

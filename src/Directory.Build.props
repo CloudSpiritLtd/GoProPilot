@@ -44,16 +44,16 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="DynamicData" Version="7.12.11" />
+        <PackageReference Include="Downloader" Version="3.0.4" />
+        <PackageReference Include="DryIoc.dll" Version="5.3.4" />
+        <PackageReference Include="DynamicData" Version="7.13.1" />
         <PackageReference Include="Fody" Version="6.6.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Downloader" Version="3.0.3" />
-        <PackageReference Include="DryIoc.dll" Version="5.3.3" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-        <PackageReference Include="ReactiveUI" Version="18.4.22" />
-        <PackageReference Include="ReactiveUI.Fody" Version="18.4.22" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="ReactiveUI" Version="18.4.26" />
+        <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
     </ItemGroup>
 
 </Project>
